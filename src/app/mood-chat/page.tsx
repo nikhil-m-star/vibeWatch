@@ -191,7 +191,7 @@ export default function MoodChatPage() {
                 What is your <span className="text-[#a855f7]">vibe</span> today?
               </h1>
 
-              <div className="grid sm:grid-cols-2 gap-3 max-w-lg mx-auto">
+              <div className="flex flex-wrap gap-3 justify-center max-w-2xl mx-auto">
                 {presets.map((preset) => (
                   <button
                     key={preset.text}
@@ -199,9 +199,9 @@ export default function MoodChatPage() {
                       setInputText(preset.text);
                       handleSendMessage(preset.text);
                     }}
-                    className="cursor-pointer flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#0d0d0d] hover:bg-[#a855f7]/10 text-gray-300 hover:text-[#c084fc] font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-lg shadow-black/40 text-left"
+                    className="cursor-pointer flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0d0d0d] hover:bg-[#a855f7] hover:text-white text-gray-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.05] shadow-lg shadow-black/40"
                   >
-                    <preset.icon size={16} className="text-[#a855f7] flex-shrink-0" />
+                    <preset.icon size={14} className="text-[#a855f7] group-hover:text-white flex-shrink-0" />
                     <span>{preset.text}</span>
                   </button>
                 ))}
@@ -272,9 +272,7 @@ export default function MoodChatPage() {
                       className="flex flex-col gap-3 animate-pulse"
                     >
                       {/* Vertical Poster Skeleton */}
-                      <div className="aspect-[2/3] w-full rounded-[24px] bg-[#0d0d0d] flex items-center justify-center">
-                        <Loader2 className="animate-spin text-[#a855f7]/40" size={32} />
-                      </div>
+                      <div className="aspect-[2/3] w-full rounded-[24px] bg-[#0d0d0d]"></div>
                       
                       {/* Metadata Skeleton */}
                       <div className="space-y-2 mt-1">

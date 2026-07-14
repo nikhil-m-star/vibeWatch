@@ -232,7 +232,7 @@ export async function getReplacementRecommendation(queryId: string, currentTitle
 
   const history = await db.watchHistory.findMany({
     where: { userId: user.id },
-    select: { title: true, mediaType: true, rating: true },
+    select: { title: true },
   });
 
   const moodQuery = await db.moodQuery.findUnique({
@@ -245,12 +245,16 @@ export async function getReplacementRecommendation(queryId: string, currentTitle
   const conversation = moodQuery.conversation as unknown as ChatMessage[];
   const tags = (moodQuery.interpretedTags || { genres: [], tone: [], pacing: "medium" }) as any;
 
+  // Build a single, consolidated flat exclusion array of strings
+  const historyTitles = history.map((h) => h.title);
+  const combinedExclusions = Array.from(new Set([...currentTitles, ...historyTitles]));
+
   // Generate 1 single suggestion
   const aiRec = await generateSingleReplacement(
     conversation,
     tags,
-    history,
-    currentTitles
+    [], // Pass empty history since we already filtered everything in combinedExclusions
+    combinedExclusions
   );
 
   if (!aiRec) {
