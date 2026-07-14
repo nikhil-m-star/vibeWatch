@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090a0f;
+  --background: #07080c;
   --foreground: #f4f5f6;
-  --card-bg: #12141c;
-  --card-hover-bg: #171b26;
+  --card-bg: #11131a;
+  --card-hover-bg: #151722;
   --brand-red: #e23744;
-  --accent-glow: rgba(226, 55, 68, 0.25);
-  --glass-bg: rgba(18, 20, 28, 0.75);
+  --accent-glow: rgba(226, 55, 68, 0.22);
+  --glass-bg: rgba(14, 16, 22, 0.8);
 }
 
 @theme inline {
@@ -36,87 +36,102 @@ body {
   scrollbar-width: none;
 }
 
+/* Premium Visual Patterns */
+.premium-dots {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.premium-glow-btn {
+  box-shadow: 0 4px 14px 0 rgba(226, 55, 68, 0.2);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.premium-glow-btn:hover {
+  box-shadow: 0 6px 20px 0 rgba(226, 55, 68, 0.35);
+  transform: translateY(-1px);
+}
+
 /* District UI Elements */
 .district-panel {
   background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .district-card {
   background: var(--card-bg);
   border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 24px;
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  border-radius: 28px;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .district-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(226, 55, 68, 0.4);
-  box-shadow: 0 12px 35px -8px var(--accent-glow);
+  transform: translateY(-6px) scale(1.008);
+  border-color: rgba(226, 55, 68, 0.3);
+  box-shadow: 0 20px 40px -12px var(--accent-glow);
 }
 
 .district-badge-red {
-  background: rgba(226, 55, 68, 0.1);
+  background: rgba(226, 55, 68, 0.08);
   color: #ff4d5d;
-  border: 1px solid rgba(226, 55, 68, 0.2);
-  font-weight: 800;
+  border: 1px solid rgba(226, 55, 68, 0.15);
+  font-weight: 900;
   text-transform: uppercase;
-  font-size: 9px;
-  letter-spacing: 0.05em;
+  font-size: 8px;
+  letter-spacing: 0.06em;
 }
 
 .district-badge-lime {
-  background: rgba(163, 230, 53, 0.1);
+  background: rgba(163, 230, 53, 0.08);
   color: #a3e635;
-  border: 1px solid rgba(163, 230, 53, 0.2);
-  font-weight: 800;
+  border: 1px solid rgba(163, 230, 53, 0.15);
+  font-weight: 900;
   text-transform: uppercase;
-  font-size: 9px;
-  letter-spacing: 0.05em;
+  font-size: 8px;
+  letter-spacing: 0.06em;
 }
 
 .district-badge-cyan {
-  background: rgba(6, 182, 212, 0.1);
+  background: rgba(6, 182, 212, 0.08);
   color: #22d3ee;
-  border: 1px solid rgba(6, 182, 212, 0.2);
-  font-weight: 800;
+  border: 1px solid rgba(6, 182, 212, 0.15);
+  font-weight: 900;
   text-transform: uppercase;
-  font-size: 9px;
-  letter-spacing: 0.05em;
+  font-size: 8px;
+  letter-spacing: 0.06em;
 }
 
 .district-btn-primary {
   background: var(--brand-red);
   color: #ffffff;
-  font-weight: 800;
+  font-weight: 900;
   text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.05em;
-  border-radius: 14px;
-  transition: all 0.2s ease;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .district-btn-primary:hover {
   opacity: 0.95;
-  transform: scale(1.02);
+  transform: translateY(-1px);
 }
 
 .district-btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  font-weight: 800;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.05em;
-  border-radius: 14px;
+  border-radius: 12px;
   transition: all 0.2s ease;
 }
 .district-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .district-pill-active {
@@ -128,15 +143,15 @@ body {
 }
 
 .district-pill-inactive {
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   color: #9ca3af;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   font-weight: 600;
   border-radius: 9999px;
   transition: all 0.2s ease;
 }
 .district-pill-inactive:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.07);
   color: #ffffff;
 }
 

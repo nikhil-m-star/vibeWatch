@@ -30,20 +30,20 @@ export default function Header() {
         </Link>
 
         {/* Navigation Tabs (Dynamic highlights based on route) */}
-        <nav className="flex items-center gap-2 bg-black/40 border border-white/5 p-1 rounded-full">
+        <nav className="flex items-center gap-1 bg-black/50 border border-white/10 p-1 rounded-full shadow-inner">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all duration-200 ${
+                className={`flex items-center gap-1.5 px-3.5 sm:px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-wider transition-all duration-300 ${
                   isActive
-                    ? "bg-[#e23744] text-white shadow-md shadow-[#e23744]/15"
+                    ? "bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white shadow-lg shadow-[#e23744]/25 scale-[1.03]"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
-                <item.icon size={13} />
+                <item.icon size={13} className={isActive ? "animate-pulse" : ""} />
                 <span className="hidden sm:inline">{item.name}</span>
               </Link>
             );
