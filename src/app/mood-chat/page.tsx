@@ -262,40 +262,42 @@ export default function MoodChatPage() {
               {isLoading ? (
                 <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-500">
                   {/* Cinematic smooth ribbon stretching edge-to-edge across screen */}
-                  <div className="w-screen overflow-hidden py-6 flex items-center justify-center gap-4 md:gap-6">
+                  <div className="w-screen overflow-hidden py-6 flex items-center justify-center gap-4 md:gap-8">
                     {(() => {
                       const offsets = [-3, -2, -1, 0, 1, 2, 3];
                       return offsets.map((offset) => {
                         const idx = (loadingActiveIndex + offset + activePosters.length) % activePosters.length;
                         const poster = activePosters[idx];
                         
-                        // Dynamic properties based on center distance
-                        let scaleClass = "";
-                        let opacityClass = "";
-                        let sizeClass = "";
+                        // Dynamic scales and opacities on a fixed base dimension (GPU composite layer)
+                        let scaleStyle = "scale-100";
+                        let opacityStyle = "opacity-100";
+                        let zIndexStyle = "z-0";
+                        let shadowStyle = "";
                         
                         if (offset === 0) {
-                          scaleClass = "scale-110 z-10 shadow-2xl shadow-black/90";
-                          opacityClass = "opacity-100";
-                          sizeClass = "w-36 h-54 md:w-56 md:h-84";
+                          scaleStyle = "scale-[1.18]";
+                          opacityStyle = "opacity-100";
+                          zIndexStyle = "z-20";
+                          shadowStyle = "shadow-[0_20px_50px_rgba(0,0,0,0.9)]";
                         } else if (Math.abs(offset) === 1) {
-                          scaleClass = "scale-95";
-                          opacityClass = "opacity-45";
-                          sizeClass = "w-30 h-45 md:w-44 md:h-66";
+                          scaleStyle = "scale-[0.92]";
+                          opacityStyle = "opacity-45";
+                          zIndexStyle = "z-10";
                         } else if (Math.abs(offset) === 2) {
-                          scaleClass = "scale-85";
-                          opacityClass = "opacity-15";
-                          sizeClass = "w-24 h-36 md:w-36 md:h-54";
+                          scaleStyle = "scale-[0.72]";
+                          opacityStyle = "opacity-15";
+                          zIndexStyle = "z-0";
                         } else {
-                          scaleClass = "scale-75";
-                          opacityClass = "opacity-5";
-                          sizeClass = "w-20 h-30 md:w-28 md:h-42";
+                          scaleStyle = "scale-[0.52]";
+                          opacityStyle = "opacity-5";
+                          zIndexStyle = "z-0";
                         }
                         
                         return (
                           <div
                             key={`${idx}-${offset}`}
-                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[850ms] ease-in-out transform flex-none ${scaleClass} ${opacityClass} ${sizeClass}`}
+                            className={`w-32 h-48 md:w-48 md:h-72 rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[850ms] ease-in-out transform flex-none ${scaleStyle} ${opacityStyle} ${zIndexStyle} ${shadowStyle}`}
                           >
                             <img
                               src={poster}
