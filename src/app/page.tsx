@@ -20,7 +20,7 @@ export default async function Home() {
   let savedIds: number[] = [];
   if (userId) {
     const watchlist = await getWatchlist();
-    savedIds = watchlist.map((item) => item.tmdbId);
+    savedIds = watchlist.map((item: any) => item.tmdbId);
   }
 
   return (
