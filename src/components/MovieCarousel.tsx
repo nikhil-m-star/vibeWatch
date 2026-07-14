@@ -88,7 +88,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                 </span>
 
                 {/* Bottom action drawer on hover, leaving the poster visible */}
-                <div className="absolute bottom-0 left-0 right-0 p-3 bg-[#0d0d0d]/90 backdrop-blur-md opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
+                <div className="absolute bottom-0 left-0 right-0 p-3 bg-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
                   <div className="flex gap-2 w-full">
                     {isTheatrical ? (
                       <a
