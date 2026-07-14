@@ -100,12 +100,62 @@ export async function fetchUpcoming(): Promise<TMDBMovie[]> {
 }
 
 export async function searchTitle(title: string, type: "movie" | "tv"): Promise<TMDBMovie | null> {
-  const endpoint = type === "movie" ? "/search/movie" : "/search/tv";
-  const data = await fetchFromTMDB(endpoint, {
+  let endpoint = type === "movie" ? "/search/movie" : "/search/tv";
+  let data = await fetchFromTMDB(endpoint, {
     query: title,
     language: "en-US",
     page: "1",
   });
+
+  // Fallback 1: Try the other type if the requested type yielded no results
+  if (!data || !data.results || data.results.length === 0) {
+    const otherType = type === "movie" ? "tv" : "movie";
+    endpoint = otherType === "movie" ? "/search/movie" : "/search/tv";
+    data = await fetchFromTMDB(endpoint, {
+      query: title,
+      language: "en-US",
+      page: "1",
+    });
+    if (data && data.results && data.results.length > 0) {
+      type = otherType; // Found a match in the other category
+    }
+  }
+
+  // Fallback 2: Clean and simplify the query (e.g., "Spider-Man Noir Series" -> "Spider-Noir")
+  if (!data || !data.results || data.results.length === 0) {
+    let cleanQuery = title;
+    // Map common variations of Spider-Man Noir
+    if (title.toLowerCase().includes("spider-man noir") || title.toLowerCase().includes("spiderman noir")) {
+      cleanQuery = "Spider-Noir";
+    }
+    
+    // Strip descriptive suffixes
+    cleanQuery = cleanQuery.replace(/\b(series|tv show|show|film|movie|miniseries|mini-series|animated series)\b/gi, "").trim();
+
+    if (cleanQuery.toLowerCase() !== title.toLowerCase()) {
+      // Search with original requested type
+      endpoint = type === "movie" ? "/search/movie" : "/search/tv";
+      data = await fetchFromTMDB(endpoint, {
+        query: cleanQuery,
+        language: "en-US",
+        page: "1",
+      });
+
+      // Try other type with cleaned query
+      if (!data || !data.results || data.results.length === 0) {
+        const otherType = type === "movie" ? "tv" : "movie";
+        endpoint = otherType === "movie" ? "/search/movie" : "/search/tv";
+        data = await fetchFromTMDB(endpoint, {
+          query: cleanQuery,
+          language: "en-US",
+          page: "1",
+        });
+        if (data && data.results && data.results.length > 0) {
+          type = otherType;
+        }
+      }
+    }
+  }
 
   if (!data || !data.results || data.results.length === 0) return null;
   const item = data.results[0];

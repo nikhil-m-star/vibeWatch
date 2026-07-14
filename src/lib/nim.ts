@@ -185,6 +185,9 @@ You MUST recommend a mix of:
 2. Movies currently in theatres or upcoming releases (when they fit the mood). Here is a list of movies/shows currently in theatres or releasing soon:
 ${releasesList || "No current list available."}
 
+IMPORTANT CULTURAL GUIDELINE:
+- If a user asks for a dark, gritty, or serious "Spider-Man" series or show, you MUST prioritize recommending the upcoming series "Spider-Noir" (TV show) or "Spider-Man Noir" (TV show) or "Spider-Man: The New Animated Series" (TV show).
+
 If you suggest a title from the In-Theatres or Upcoming list, mention that clearly in the "reason" (e.g. "Catch it now in theatres!" or "Keep an eye out for this upcoming release!").
 
 Prefer suggesting things they haven't watched, or similar to highly rated ones in their history:
