@@ -229,9 +229,9 @@ export default function MoodChatPage() {
                         {rec.mediaType === "movie" ? "Movie" : "TV Show"}
                       </span>
 
-                      {/* Hover overlay with button controls only */}
-                      <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                        <div className="flex gap-2">
+                      {/* Bottom action drawer on hover, leaving the poster visible */}
+                      <div className="absolute bottom-0 left-0 right-0 p-3 bg-[#0d0d0d]/90 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
+                        <div className="flex gap-2 w-full">
                           <button
                             onClick={() => handleToggleWatchlist(rec)}
                             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary"

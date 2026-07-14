@@ -79,15 +79,6 @@ export default function WatchlistList({ items }: WatchlistListProps) {
                 {item.mediaType === "movie" ? "Movie" : "Series"}
               </span>
 
-              {/* Hover overlay with Unsave control button only */}
-              <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                <button
-                  onClick={() => handleRemove(item)}
-                  className="cursor-pointer flex-1 flex items-center justify-center text-[10px] font-extrabold uppercase py-2.5 bg-white/5 hover:bg-red-500/10 hover:text-red-400 text-white rounded-xl transition-all"
-                >
-                  Unsave
-                </button>
-              </div>
             </div>
 
             {/* Content & Metadata details underneath the image */}
@@ -145,6 +136,14 @@ export default function WatchlistList({ items }: WatchlistListProps) {
                   </div>
                 )}
               </div>
+
+              {/* Statically positioned Unsave Button */}
+              <button
+                onClick={() => handleRemove(item)}
+                className="w-full py-2.5 mt-1 text-[10px] font-extrabold uppercase bg-white/5 hover:bg-red-500/10 hover:text-red-400 text-white rounded-xl transition-all"
+              >
+                Unsave
+              </button>
             </div>
           </div>
         );

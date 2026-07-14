@@ -27,6 +27,11 @@ body {
   overflow-x: hidden;
 }
 
+/* Global cursor pointer utility for all buttons and interactive elements */
+button, a, [role="button"], input[type="submit"] {
+  cursor: pointer !important;
+}
+
 /* Scrollbar Utility */
 .scrollbar-none::-webkit-scrollbar {
   display: none;

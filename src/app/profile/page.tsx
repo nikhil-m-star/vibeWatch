@@ -4,11 +4,16 @@ import { getWatchHistory } from "@/app/actions/history";
 import { getWatchlist } from "@/app/actions/watchlist";
 import ProfileTabs from "./ProfileTabs";
 import { Sparkles, History, Bookmark } from "lucide-react";
+import { currentUser } from "@clerk/nextjs/server";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
-  const user = await getOrCreateUser();
+  const [clerkUser, user] = await Promise.all([
+    currentUser(),
+    getOrCreateUser(),
+  ]);
+
   if (!user) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-black">
@@ -29,9 +34,17 @@ export default async function ProfilePage() {
       {/* Profile Header Card - Borderless, solid bg */}
       <div className="relative p-6 md:p-8 rounded-3xl bg-[#0d0d0d] shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 district-card">
         <div className="flex items-center gap-4 relative z-10">
-          <div className="h-16 w-16 rounded-full bg-[#a855f7] flex items-center justify-center font-black text-2xl text-white tracking-tighter">
-            {user.name?.charAt(0) || "U"}
-          </div>
+          {clerkUser?.imageUrl ? (
+            <img
+              src={clerkUser.imageUrl}
+              alt={user.name || "Profile"}
+              className="h-16 w-16 rounded-full object-cover"
+            />
+          ) : (
+            <div className="h-16 w-16 rounded-full bg-[#a855f7] flex items-center justify-center font-black text-2xl text-white tracking-tighter">
+              {user.name?.charAt(0) || "U"}
+            </div>
+          )}
           <div>
             <h1 className="text-xl md:text-2xl font-black tracking-tight text-white leading-tight">
               {user.name || "User Profile"}

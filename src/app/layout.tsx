@@ -22,7 +22,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${poppins.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#090a0f] text-gray-100 pb-8">
+      <body className="min-h-full flex flex-col bg-black text-gray-100 pb-8 font-sans">
         <ClerkProvider>
           {/* Main Top Header Navbar (Dynamic Client Component) */}
           <Header />
