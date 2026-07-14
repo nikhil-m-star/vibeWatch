@@ -3,7 +3,7 @@ import { getPastQueries } from "@/app/actions/chat";
 import { getWatchHistory } from "@/app/actions/history";
 import { getWatchlist } from "@/app/actions/watchlist";
 import ProfileTabs from "./ProfileTabs";
-import { Sparkles, History, Bookmark } from "lucide-react";
+import { History, Bookmark, MessageSquare } from "lucide-react";
 import { currentUser } from "@clerk/nextjs/server";
 
 export const dynamic = "force-dynamic";
@@ -60,7 +60,7 @@ export default async function ProfilePage() {
               Sessions
             </span>
             <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
-              <Sparkles size={14} className="text-[#a855f7]" /> {pastQueries.length}
+              <MessageSquare size={14} className="text-[#a855f7]" /> {pastQueries.length}
             </span>
           </div>
 

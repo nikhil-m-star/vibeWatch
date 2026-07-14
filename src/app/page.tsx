@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Sparkles, ArrowRight, Film, Tv, Flame, TrendingUp, Sparkle } from "lucide-react";
+import { ArrowRight, Film, Tv, Flame, TrendingUp, Clock } from "lucide-react";
 import { fetchNowPlaying, fetchUpcoming, fetchTrending, fetchRecent } from "@/lib/tmdb";
 import { getWatchlist } from "@/app/actions/watchlist";
 import MovieCarousel from "@/components/MovieCarousel";
@@ -98,7 +98,7 @@ export default async function Home() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-7 w-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
-                <Sparkle size={14} />
+                <Clock size={14} />
               </div>
               <h2 className="text-lg font-black tracking-tight text-white uppercase">
                 Recent Hits

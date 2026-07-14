@@ -165,7 +165,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                     {/* Recommendations List */}
                     <div className="space-y-3 pt-2">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-1.5">
-                        <Sparkles size={11} className="text-[#a855f7]" /> Generated Suggestions ({query.recommendations?.length || 0})
+                        <Film size={11} className="text-[#a855f7]" /> Generated Suggestions ({query.recommendations?.length || 0})
                       </span>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {query.recommendations?.map((rec: any) => (

@@ -7,7 +7,7 @@ import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Sparkles, Check, Loader2, ArrowUp, ExternalLink, RotateCcw
+  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -186,7 +186,7 @@ export default function MoodChatPage() {
             {/* Results Header */}
             <div className="flex items-center justify-between pb-4">
               <h1 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-                <Sparkles size={14} className="text-[#a855f7]" />
+                <Compass size={14} className="text-[#a855f7]" />
                 VIBE RESULTS
               </h1>
               <button
