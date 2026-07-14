@@ -169,11 +169,23 @@ ${JSON.stringify(watchHistory)}
 export async function generateRecommendations(
   conversation: ChatMessage[],
   tags: { genres: string[]; tone: string[]; pacing: string },
-  watchHistory: { title: string; mediaType: string; rating: number | null }[]
+  watchHistory: { title: string; mediaType: string; rating: number | null }[],
+  currentReleases: { title: string; mediaType: "movie" | "tv"; releaseDate?: string; type: "now_playing" | "upcoming" }[] = []
 ): Promise<AIRecommendation[]> {
+  const releasesList = currentReleases
+    .map((r) => `- [${r.type === "now_playing" ? "IN THEATRES NOW" : "UPCOMING RELEASE"}] ${r.title} (${r.mediaType})`)
+    .join("\n");
+
   const systemPrompt = `You are Vibe Watch's expert cinema recommender. Based on the user's conversation, mood tags, and watch history, recommend 6 real, highly relevant movies or TV shows.
 Include a specific, short, personalized explanation (1-2 sentences) for why each title fits their mood ("reason").
 Do NOT invent titles. Only suggest real, searchable movies or TV shows.
+
+You MUST recommend a mix of:
+1. Popular movies or TV shows available on major OTT platforms (Netflix, Amazon Prime Video, Disney+ Hotstar, Apple TV+, Zee5, SonyLIV, JioCinema, etc.).
+2. Movies currently in theatres or upcoming releases (when they fit the mood). Here is a list of movies/shows currently in theatres or releasing soon:
+${releasesList || "No current list available."}
+
+If you suggest a title from the In-Theatres or Upcoming list, mention that clearly in the "reason" (e.g. "Catch it now in theatres!" or "Keep an eye out for this upcoming release!").
 
 Prefer suggesting things they haven't watched, or similar to highly rated ones in their history:
 Watch History: ${JSON.stringify(watchHistory)}

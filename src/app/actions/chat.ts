@@ -3,7 +3,7 @@
 import { getOrCreateUser } from "@/lib/user";
 import { db } from "@/lib/db";
 import { interpretMoodAndQuestion, generateRecommendations, ChatMessage } from "@/lib/nim";
-import { searchTitle } from "@/lib/tmdb";
+import { searchTitle, fetchNowPlaying, fetchUpcoming } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
 
 export async function sendChatMessage(queryId: string | null, messageText: string) {
@@ -59,10 +59,20 @@ export async function sendChatMessage(queryId: string | null, messageText: strin
     let aiRecs: any[] = [];
     if (!errorOccurred) {
       try {
+        const [nowPlaying, upcoming] = await Promise.all([
+          fetchNowPlaying().catch(() => []),
+          fetchUpcoming().catch(() => []),
+        ]);
+        const currentReleases = [
+          ...(nowPlaying || []).map((m) => ({ title: m.title, mediaType: m.media_type, releaseDate: m.release_date, type: "now_playing" as const })),
+          ...(upcoming || []).map((m) => ({ title: m.title, mediaType: m.media_type, releaseDate: m.release_date, type: "upcoming" as const })),
+        ];
+
         aiRecs = await generateRecommendations(
           conversation,
           interpretedResult.interpretedTags || { genres: [], tone: [], pacing: "medium" },
-          history
+          history,
+          currentReleases
         );
       } catch (err) {
         console.error("NIM Error in recommendations:", err);
