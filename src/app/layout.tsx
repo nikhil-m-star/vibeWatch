@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 import Link from "next/link";
+import { Compass, MessageSquare, Bookmark, User } from "lucide-react";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -24,24 +25,27 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${outfit.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#08090c] text-gray-100">
+      <body className="min-h-full flex flex-col bg-[#090a0f] text-gray-100 pb-28 md:pb-28">
         <ClerkProvider>
           {/* Header */}
-          <header className="sticky top-0 z-50 w-full glass-panel border-b border-white/5 px-4 py-3 md:px-8">
+          <header className="sticky top-0 z-50 w-full district-panel border-b border-white/5 px-4 py-3.5 md:px-8">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
               {/* Brand Logo */}
               <Link href="/" className="flex items-center gap-2 group">
-                <span className="text-2xl font-black tracking-tighter bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent group-hover:opacity-85 transition-opacity">
+                <span className="text-xl md:text-2xl font-black tracking-tight text-white flex items-center gap-2">
+                  <span className="h-7 w-7 rounded-lg bg-[#e23744] flex items-center justify-center text-sm text-white font-black shadow-lg shadow-[#e23744]/20 transition-transform group-hover:scale-105 duration-200">
+                    V
+                  </span>
                   VIBE WATCH
                 </span>
               </Link>
 
               {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-6 text-sm font-semibold tracking-wide text-gray-300">
+              <nav className="hidden md:flex items-center gap-8 text-xs font-black uppercase tracking-wider text-gray-400">
                 <Link href="/" className="hover:text-white transition-colors">
                   Explore
                 </Link>
-                <Link href="/mood-chat" className="hover:text-white transition-colors bg-gradient-to-r from-red-500/20 to-orange-500/20 px-3 py-1.5 rounded-full border border-red-500/30 text-orange-400">
+                <Link href="/mood-chat" className="hover:text-brand transition-colors text-[#ff4d5d]">
                   Mood Chat
                 </Link>
                 <Link href="/watchlist" className="hover:text-white transition-colors">
@@ -54,24 +58,18 @@ export default async function RootLayout({
 
               {/* Auth Controls */}
               <div className="flex items-center gap-4">
-                <Link href="/mood-chat" className="md:hidden text-xs font-bold text-orange-400 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20">
-                  Chat
-                </Link>
                 {!userId ? (
                   <SignInButton mode="modal">
-                    <button className="cursor-pointer text-xs font-bold uppercase tracking-wider bg-gradient-to-r from-red-500 to-orange-500 text-white px-4 py-2 rounded-full hover:opacity-90 transition-opacity">
+                    <button className="cursor-pointer text-[10px] font-black uppercase tracking-wider bg-[#e23744] text-white px-5 py-2.5 rounded-xl hover:opacity-90 transition-opacity shadow-lg shadow-[#e23744]/15">
                       Sign In
                     </button>
                   </SignInButton>
                 ) : (
                   <div className="flex items-center gap-3">
-                    <Link href="/watchlist" className="md:hidden text-xs text-gray-300 hover:text-white">
-                      Watchlist
-                    </Link>
                     <UserButton
                       appearance={{
                         elements: {
-                          avatarBox: "h-8 w-8 rounded-full border border-white/10 hover:border-orange-500/50 transition-colors",
+                          avatarBox: "h-8 w-8 rounded-full border border-white/10 hover:border-[#e23744] transition-colors",
                         },
                       }}
                     />
@@ -87,13 +85,33 @@ export default async function RootLayout({
             {children}
           </main>
 
+          {/* Floating Bottom Tab Bar */}
+          <div className="floating-bottom-nav flex items-center justify-around gap-8 sm:gap-12 px-6 sm:px-10 py-3">
+            <Link href="/" className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#e23744] transition-colors group">
+              <Compass size={20} className="group-hover:scale-105 transition-transform" />
+              <span className="text-[9px] font-extrabold uppercase tracking-widest">Explore</span>
+            </Link>
+            <Link href="/mood-chat" className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#e23744] transition-colors group">
+              <MessageSquare size={20} className="group-hover:scale-105 transition-transform" />
+              <span className="text-[9px] font-extrabold uppercase tracking-widest">Vibe Chat</span>
+            </Link>
+            <Link href="/watchlist" className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#e23744] transition-colors group">
+              <Bookmark size={20} className="group-hover:scale-105 transition-transform" />
+              <span className="text-[9px] font-extrabold uppercase tracking-widest">Watchlist</span>
+            </Link>
+            <Link href="/profile" className="flex flex-col items-center gap-1 text-gray-400 hover:text-[#e23744] transition-colors group">
+              <User size={20} className="group-hover:scale-105 transition-transform" />
+              <span className="text-[9px] font-extrabold uppercase tracking-widest">Profile</span>
+            </Link>
+          </div>
+
           {/* Footer */}
-          <footer className="w-full border-t border-white/5 py-8 text-center text-xs text-gray-500 mt-auto bg-[#060709]">
+          <footer className="w-full border-t border-white/5 py-8 text-center text-xs text-gray-500 mt-auto bg-[#07080c] pb-24">
             <div className="max-w-7xl mx-auto px-4">
               <p className="mb-2">© {new Date().getFullYear()} Vibe Watch. All rights reserved.</p>
               <p className="text-gray-600 max-w-md mx-auto leading-relaxed">
-                Powered by NVIDIA NIM (Llama 3.3-70B) for interprets and TMDB API for streaming listings.
-                Theatrical listings deep-linked to BookMyShow. No ticketing data is gathered or stored.
+                Powered by NVIDIA NIM (Llama 3.1-8B) for interpretation and TMDB API for streaming listings.
+                Theatrical listings deep-linked to BookMyShow.
               </p>
             </div>
           </footer>

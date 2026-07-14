@@ -51,14 +51,14 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
   };
 
   return (
-    <div className="relative group">
+    <div className="relative w-full">
       {/* Horizontal Scroll Carousel */}
       <div className="flex gap-6 overflow-x-auto scrollbar-none pb-6 snap-x snap-mandatory px-4 md:px-0">
         {movies.map((movie) => {
           const isSaved = localSaved[movie.id];
           const posterUrl = movie.poster_path
             ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-            : "/placeholder-poster.png"; // Fallback if no poster
+            : "/placeholder-poster.png";
 
           return (
             <div
@@ -67,7 +67,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
               className="flex-none w-[180px] md:w-[220px] snap-start cursor-pointer group/card"
             >
               {/* Image Container */}
-              <div className="relative aspect-[2/3] w-full rounded-2xl overflow-hidden bg-gray-900 border border-white/5 glow-card">
+              <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#12141c] border border-white/5 district-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={posterUrl}
@@ -76,8 +76,19 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                   className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                 />
 
+                {/* Floating Media Category Badge */}
+                <span className={`absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[9px] ${
+                  isTheatrical 
+                    ? "district-badge-lime" 
+                    : movie.media_type === "movie" 
+                      ? "district-badge-red" 
+                      : "district-badge-cyan"
+                }`}>
+                  {isTheatrical ? "IN THEATRES" : movie.media_type === "movie" ? "Movie" : "Series"}
+                </span>
+
                 {/* Hover overlay with button controls */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#08090c]/90 via-black/20 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                   <div className="flex gap-2">
                     {isTheatrical ? (
                       <a
@@ -85,52 +96,48 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 flex items-center justify-center gap-1 text-[11px] font-black uppercase bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 rounded-lg hover:opacity-90 transition-opacity"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[10px] district-btn-primary shadow-lg shadow-[#e23744]/20"
                       >
-                        Tickets <ExternalLink size={10} />
+                        Tickets <ExternalLink size={11} />
                       </a>
                     ) : (
                       <button
                         onClick={(e) => handleFollowToggle(movie, e)}
-                        className="cursor-pointer flex-1 flex items-center justify-center gap-1 text-[11px] font-black uppercase bg-white text-black py-2 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="flex-1 flex items-center justify-center gap-1 py-2.5 text-[10px] district-btn-secondary"
                       >
                         {isSaved ? (
                           <>
-                            Saved <Check size={11} />
+                            Saved <Check size={11} className="text-brand" />
                           </>
                         ) : (
                           <>
-                            Watchlist <Plus size={11} />
+                            Save <Plus size={11} />
                           </>
                         )}
                       </button>
                     )}
                     <button
                       onClick={() => setSelectedMovie(movie)}
-                      className="cursor-pointer p-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/10 text-white"
+                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-colors"
                     >
-                      <Info size={14} />
+                      <Info size={12} />
                     </button>
                   </div>
                 </div>
               </div>
 
               {/* Title & Metadata */}
-              <div className="mt-3">
-                <h3 className="text-sm font-bold tracking-tight text-white line-clamp-1 group-hover/card:text-orange-400 transition-colors">
+              <div className="mt-3.5 px-1">
+                <h3 className="text-sm font-black tracking-tight text-white line-clamp-1 group-hover/card:text-[#e23744] transition-colors leading-snug">
                   {movie.title}
                 </h3>
-                <div className="flex items-center gap-2 mt-0.5 text-xs text-gray-500 font-medium">
-                  <span className="capitalize">{movie.media_type === "movie" ? "Movie" : "Series"}</span>
-                  <span>•</span>
-                  {movie.release_date && (
-                    <span>{new Date(movie.release_date).getFullYear() || "TBA"}</span>
-                  )}
-                  {movie.vote_average && movie.vote_average > 0 && (
-                    <span className="flex items-center gap-0.5 text-amber-500/90 font-bold ml-auto">
+                <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500 font-bold uppercase tracking-wider">
+                  <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : "TBA"}</span>
+                  {movie.vote_average && movie.vote_average > 0 ? (
+                    <span className="flex items-center gap-0.5 text-amber-500 ml-auto">
                       <Star size={10} className="fill-amber-500" /> {movie.vote_average.toFixed(1)}
                     </span>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -140,14 +147,14 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
 
       {/* Movie Details Modal */}
       {selectedMovie && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div className="relative w-full max-w-2xl bg-[#11131a] border border-white/10 rounded-3xl overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="relative w-full max-w-2xl bg-[#12141c] border border-white/10 rounded-[32px] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             {/* Close Button */}
             <button
               onClick={() => setSelectedMovie(null)}
-              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/60 hover:bg-black/80 text-gray-400 hover:text-white border border-white/5 transition-colors"
+              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-gray-400 hover:text-white border border-white/5 transition-colors"
             >
-              <X size={20} />
+              <X size={18} />
             </button>
 
             {/* Poster + details banner */}
@@ -169,13 +176,19 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
               {/* Text side */}
               <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-between">
                 <div>
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <span className="text-[10px] uppercase tracking-wider font-extrabold px-2.5 py-1 bg-white/5 border border-white/10 rounded-full text-orange-400">
-                      {selectedMovie.media_type === "movie" ? "Theatrical Movie" : "TV Series"}
+                  <div className="flex flex-wrap items-center gap-2 mb-3">
+                    <span className={`text-[9px] uppercase tracking-wider font-black px-2.5 py-1 rounded-full ${
+                      isTheatrical 
+                        ? "district-badge-lime" 
+                        : selectedMovie.media_type === "movie" 
+                          ? "district-badge-red" 
+                          : "district-badge-cyan"
+                    }`}>
+                      {isTheatrical ? "Theatrical Release" : selectedMovie.media_type === "movie" ? "Movie" : "TV Series"}
                     </span>
                     {selectedMovie.vote_average && selectedMovie.vote_average > 0 && (
-                      <span className="text-xs font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded-full flex items-center gap-1">
-                        <Star size={12} className="fill-amber-500" />
+                      <span className="text-xs font-black text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-amber-500/20">
+                        <Star size={11} className="fill-amber-500" />
                         {selectedMovie.vote_average.toFixed(1)} / 10
                       </span>
                     )}
@@ -186,8 +199,8 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                   </h2>
 
                   {selectedMovie.release_date && (
-                    <p className="text-xs font-semibold text-gray-400 flex items-center gap-1.5 mb-4">
-                      <Calendar size={13} /> Released/Airing:{" "}
+                    <p className="text-xs font-bold text-gray-400 flex items-center gap-1.5 mb-4">
+                      <Calendar size={13} /> Released:{" "}
                       {new Date(selectedMovie.release_date).toLocaleDateString("en-US", {
                         year: "numeric",
                         month: "long",
@@ -196,7 +209,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                     </p>
                   )}
 
-                  <p className="text-sm text-gray-300 leading-relaxed line-clamp-5 md:line-clamp-6">
+                  <p className="text-xs md:text-sm text-gray-300 leading-relaxed line-clamp-5 md:line-clamp-6">
                     {selectedMovie.overview || "No overview available for this title."}
                   </p>
                 </div>
@@ -208,20 +221,20 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                       href={getBmsLink(selectedMovie.title)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider bg-gradient-to-r from-red-500 to-orange-500 text-white py-3 px-4 rounded-xl hover:opacity-90 transition-opacity"
+                      className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs district-btn-primary shadow-lg shadow-[#e23744]/25"
                     >
-                      Find Showtimes (BookMyShow) <ExternalLink size={14} />
+                      Book Showtimes <ExternalLink size={13} />
                     </a>
                   ) : (
                     <button
                       onClick={(e) => {
                         handleFollowToggle(selectedMovie, e);
                       }}
-                      className="cursor-pointer flex-1 flex items-center justify-center gap-2 text-xs font-black uppercase tracking-wider bg-white text-black py-3 px-4 rounded-xl hover:bg-gray-200 transition-colors"
+                      className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs district-btn-secondary"
                     >
                       {localSaved[selectedMovie.id] ? (
                         <>
-                          Saved to Watchlist <Check size={14} />
+                          Saved to Watchlist <Check size={14} className="text-brand" />
                         </>
                       ) : (
                         <>
