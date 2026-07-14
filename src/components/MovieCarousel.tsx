@@ -76,17 +76,6 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                   className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-105"
                 />
 
-                {/* Floating Media Category Badge */}
-                <span className={`absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[9px] font-bold ${
-                  isTheatrical 
-                    ? "district-badge-lime" 
-                    : movie.media_type === "movie" 
-                      ? "district-badge-purple" 
-                      : "district-badge-cyan"
-                }`}>
-                  {isTheatrical ? "IN THEATRES" : movie.media_type === "movie" ? "Movie" : "Series"}
-                </span>
-
                 {/* Bottom action drawer on hover, leaving the poster visible */}
                 <div className="absolute bottom-0 left-0 right-0 p-3 bg-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
                   <div className="flex gap-2 w-full">

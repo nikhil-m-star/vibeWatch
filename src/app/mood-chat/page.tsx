@@ -252,13 +252,6 @@ export default function MoodChatPage() {
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
 
-                      {/* Media Type Tag */}
-                      <span className={`absolute top-3.5 left-3.5 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-                        rec.mediaType === "movie" ? "district-badge-purple" : "district-badge-cyan"
-                      }`}>
-                        {rec.mediaType === "movie" ? "Movie" : "TV Show"}
-                      </span>
-
                       {/* Bottom action drawer on hover, leaving the poster visible */}
                       <div className="absolute bottom-0 left-0 right-0 p-3 bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
                         <div className="flex gap-2 w-full">

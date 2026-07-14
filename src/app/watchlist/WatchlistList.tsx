@@ -71,14 +71,6 @@ export default function WatchlistList({ items }: WatchlistListProps) {
                 alt={item.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
-
-              {/* Media Type Tag */}
-              <span className={`absolute top-3 left-3 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-                item.mediaType === "movie" ? "district-badge-purple" : "district-badge-cyan"
-              }`}>
-                {item.mediaType === "movie" ? "Movie" : "Series"}
-              </span>
-
             </div>
 
             {/* Content & Metadata details underneath the image */}

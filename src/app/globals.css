@@ -16,7 +16,7 @@
   --color-card: var(--card-bg);
   --color-card-hover: var(--card-hover-bg);
   --color-brand: var(--brand-purple);
-  --font-sans: var(--font-plus-jakarta), 'Inter', system-ui, sans-serif;
+  --font-sans: var(--font-outfit), 'Inter', system-ui, sans-serif;
 }
 
 body {
