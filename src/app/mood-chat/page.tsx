@@ -260,11 +260,11 @@ export default function MoodChatPage() {
               )}
 
               {isLoading ? (
-                <div className="w-screen ml-[calc(-50vw+50%)] overflow-hidden py-8 flex items-center justify-center">
-                  {/* Cinematic smooth ribbon stretching edge-to-edge */}
-                  <div className="w-full py-4 flex items-center justify-center gap-4 md:gap-6 mx-auto">
+                <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-500">
+                  {/* Cinematic smooth ribbon stretching edge-to-edge across screen */}
+                  <div className="w-screen overflow-hidden py-6 flex items-center justify-center gap-4 md:gap-6">
                     {(() => {
-                      const offsets = [-2, -1, 0, 1, 2];
+                      const offsets = [-3, -2, -1, 0, 1, 2, 3];
                       return offsets.map((offset) => {
                         const idx = (loadingActiveIndex + offset + activePosters.length) % activePosters.length;
                         const poster = activePosters[idx];
@@ -277,15 +277,19 @@ export default function MoodChatPage() {
                         if (offset === 0) {
                           scaleClass = "scale-110 z-10 shadow-2xl shadow-black/90";
                           opacityClass = "opacity-100";
-                          sizeClass = "w-36 h-54 md:w-52 md:h-78";
+                          sizeClass = "w-36 h-54 md:w-56 md:h-84";
                         } else if (Math.abs(offset) === 1) {
                           scaleClass = "scale-95";
                           opacityClass = "opacity-45";
-                          sizeClass = "w-30 h-45 md:w-40 md:h-60";
+                          sizeClass = "w-30 h-45 md:w-44 md:h-66";
+                        } else if (Math.abs(offset) === 2) {
+                          scaleClass = "scale-85";
+                          opacityClass = "opacity-15";
+                          sizeClass = "w-24 h-36 md:w-36 md:h-54";
                         } else {
-                          scaleClass = "scale-80";
-                          opacityClass = "opacity-10";
-                          sizeClass = "w-24 h-36 md:w-30 md:h-45";
+                          scaleClass = "scale-75";
+                          opacityClass = "opacity-5";
+                          sizeClass = "w-20 h-30 md:w-28 md:h-42";
                         }
                         
                         return (
@@ -302,6 +306,14 @@ export default function MoodChatPage() {
                         );
                       });
                     })()}
+                  </div>
+
+                  {/* Clean small loading text at the bottom */}
+                  <div className="mt-8 flex items-center gap-2">
+                    <Loader2 size={12} className="animate-spin text-[#a855f7]" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">
+                      Finding your matches
+                    </span>
                   </div>
                 </div>
               ) : lastAiMsg ? (
