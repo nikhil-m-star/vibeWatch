@@ -11,7 +11,7 @@ export default async function ProfilePage() {
   const user = await getOrCreateUser();
   if (!user) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#08090c]">
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-black">
         <p className="text-gray-400 text-sm">Please sign in to view your profile.</p>
       </div>
     );
@@ -25,15 +25,11 @@ export default async function ProfilePage() {
   ]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1 space-y-12">
-      {/* Profile Header Card */}
-      <div className="relative p-6 md:p-8 rounded-3xl bg-[#11131a] overflow-hidden shadow-xl glow-card flex flex-col md:flex-row items-center justify-between gap-6">
-        
-        {/* Background glow decoration */}
-        <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-full blur-[60px] pointer-events-none" />
-
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1 space-y-12 bg-black">
+      {/* Profile Header Card - Borderless, solid bg */}
+      <div className="relative p-6 md:p-8 rounded-3xl bg-[#0d0d0d] shadow-xl flex flex-col md:flex-row items-center justify-between gap-6 district-card">
         <div className="flex items-center gap-4 relative z-10">
-          <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center font-black text-2xl text-white tracking-tighter">
+          <div className="h-16 w-16 rounded-full bg-[#a855f7] flex items-center justify-center font-black text-2xl text-white tracking-tighter">
             {user.name?.charAt(0) || "U"}
           </div>
           <div>
@@ -51,7 +47,7 @@ export default async function ProfilePage() {
               Sessions
             </span>
             <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
-              <Sparkles size={14} className="text-orange-400" /> {pastQueries.length}
+              <Sparkles size={14} className="text-[#a855f7]" /> {pastQueries.length}
             </span>
           </div>
 
@@ -60,7 +56,7 @@ export default async function ProfilePage() {
               Watchlist
             </span>
             <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
-              <Bookmark size={14} className="text-red-500" /> {watchlist.length}
+              <Bookmark size={14} className="text-[#a855f7]" /> {watchlist.length}
             </span>
           </div>
 
@@ -69,11 +65,10 @@ export default async function ProfilePage() {
               Watched
             </span>
             <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
-              <History size={14} className="text-green-500" /> {watchHistory.length}
+              <History size={14} className="text-[#a855f7]" /> {watchHistory.length}
             </span>
           </div>
         </div>
-
       </div>
 
       {/* Tabs navigation and lists */}

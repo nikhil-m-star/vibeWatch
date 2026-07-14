@@ -26,10 +26,10 @@ export default async function WatchlistPage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1 bg-black">
       {/* Title Header */}
       <div className="pb-6 mb-8">
-        <span className="text-[10px] uppercase font-extrabold tracking-widest bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
+        <span className="text-[10px] uppercase font-extrabold tracking-widest text-[#a855f7]">
           My Collection
         </span>
         <h1 className="text-3xl font-black tracking-tight text-white mt-1">

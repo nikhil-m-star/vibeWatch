@@ -70,3 +70,18 @@ export async function getWatchlist() {
     orderBy: { savedAt: "desc" },
   });
 }
+
+export async function removeWatchlist(id: string) {
+  const user = await getOrCreateUser();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  await db.savedTitle.delete({
+    where: { id },
+  });
+
+  revalidatePath("/watchlist");
+  revalidatePath("/");
+  revalidatePath("/mood-chat");
+}

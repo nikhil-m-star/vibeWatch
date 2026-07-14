@@ -26,35 +26,27 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col gap-10 pb-20">
-      {/* Hero Banner Section */}
-      <section className="relative px-4 md:px-8 pt-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#12141c] to-[#090a0f] p-8 md:p-12 shadow-xl flex flex-col items-center text-center justify-center min-h-[220px]">
-            <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#e23744]/5 rounded-full blur-[80px] pointer-events-none" />
-            
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-3">
-              Discover what matches <span className="text-[#ff4d5d]">your vibe</span>.
-            </h1>
+    <div className="flex flex-col gap-10 pb-20 bg-black">
+      {/* Hero Section - Clean, Centered Header with no container box */}
+      <section className="relative px-4 md:px-8 pt-12 text-center">
+        <div className="max-w-3xl mx-auto flex flex-col items-center">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-6">
+            Discover what matches <span className="text-[#a855f7]">your vibe</span>.
+          </h1>
 
-            <p className="text-gray-400 text-xs sm:text-sm max-w-md mb-6 leading-relaxed">
-              Tell our AI concierge how you feel to get instant, streamable movie and show recommendations.
-            </p>
-
-            <Link
-              href="/mood-chat"
-              className="flex items-center justify-center gap-2 py-3 px-6 text-xs district-btn-primary shadow-md shadow-[#e23744]/20"
-            >
-              Start Vibe Chat <ArrowRight size={14} />
-            </Link>
-          </div>
+          <Link
+            href="/mood-chat"
+            className="flex items-center justify-center gap-2 py-3 px-6 text-xs font-bold uppercase tracking-wider bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25 rounded-full transition-all"
+          >
+            Start Vibe Chat <ArrowRight size={14} />
+          </Link>
         </div>
       </section>
 
       {/* Category Pills Bar */}
       <section className="px-4 md:px-8">
         <div className="max-w-7xl mx-auto flex gap-3 overflow-x-auto scrollbar-none py-1">
-          <span className="district-pill-active px-5 py-2 text-xs cursor-pointer flex-none">
+          <span className="district-pill-active px-5 py-2 text-xs cursor-pointer flex-none bg-[#a855f7] text-white">
             All Listings
           </span>
           <a href="#trending" className="district-pill-inactive px-5 py-2 text-xs cursor-pointer flex-none">
@@ -70,7 +62,7 @@ export default async function Home() {
             Upcoming
           </a>
           <Link href="/mood-chat" className="district-pill-inactive px-5 py-2 text-xs cursor-pointer flex-none text-white">
-            ⚡ AI Vibe Chat
+            AI Vibe Chat
           </Link>
         </div>
       </section>
@@ -93,7 +85,7 @@ export default async function Home() {
           {trending.length > 0 ? (
             <MovieCarousel movies={trending} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#0d0d0d]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No trending titles found.
               </p>
@@ -117,7 +109,7 @@ export default async function Home() {
           {recent.length > 0 ? (
             <MovieCarousel movies={recent} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#0d0d0d]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No recent releases found.
               </p>
@@ -129,7 +121,7 @@ export default async function Home() {
         <section id="theatres" className="flex flex-col gap-4 scroll-mt-20">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-7 w-7 rounded-lg bg-[#e23744]/10 flex items-center justify-center text-[#ff4d5d]">
+              <div className="h-7 w-7 rounded-lg bg-[#a855f7]/10 flex items-center justify-center text-[#c084fc]">
                 <Flame size={14} />
               </div>
               <h2 className="text-lg font-black tracking-tight text-white uppercase">
@@ -144,7 +136,7 @@ export default async function Home() {
           {nowPlaying.length > 0 ? (
             <MovieCarousel movies={nowPlaying} savedIds={savedIds} isTheatrical={true} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#0d0d0d]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No theatrical movies found.
               </p>
@@ -168,7 +160,7 @@ export default async function Home() {
           {upcoming.length > 0 ? (
             <MovieCarousel movies={upcoming} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#0d0d0d]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No upcoming releases found.
               </p>

@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 import { interpretMoodAndQuestion, generateRecommendations, ChatMessage } from "@/lib/nim";
 import { searchTitle, fetchNowPlaying, fetchUpcoming } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 export async function sendChatMessage(queryId: string | null, messageText: string) {
   const user = await getOrCreateUser();
@@ -17,6 +18,19 @@ export async function sendChatMessage(queryId: string | null, messageText: strin
     where: { userId: user.id },
     select: { title: true, mediaType: true, rating: true },
   });
+
+  // Basic rate limiting: 10 requests per minute per user
+  const { success } = checkRateLimit(user.id, 10, 60000);
+  if (!success) {
+    return {
+      error: true,
+      message: "Too many requests. Please wait a minute.",
+      conversation: [],
+      readyToRecommend: false,
+      recommendations: [],
+      queryId: queryId || ""
+    } as any;
+  }
 
   let moodQuery: any = null;
   let conversation: ChatMessage[] = [];

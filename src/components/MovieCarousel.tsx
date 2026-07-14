@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { TMDBMovie } from "@/lib/tmdb";
-import { Plus, Check, ExternalLink, Calendar, Star, Info, X } from "lucide-react";
+import { Plus, Check, ExternalLink, Calendar, Info, X } from "lucide-react";
 import { toggleWatchlist } from "@/app/actions/watchlist";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
@@ -52,8 +52,8 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
 
   return (
     <div className="relative w-full">
-      {/* Horizontal Scroll Carousel */}
-      <div className="flex gap-6 overflow-x-auto scrollbar-none pb-6 snap-x snap-mandatory px-4 md:px-0">
+      {/* Horizontal Scroll Carousel with vertical padding to prevent hover clipping */}
+      <div className="flex gap-6 overflow-x-auto scrollbar-none pt-4 pb-6 snap-x snap-mandatory px-4 md:px-0">
         {movies.map((movie) => {
           const isSaved = localSaved[movie.id];
           const posterUrl = movie.poster_path
@@ -67,7 +67,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
               className="flex-none w-[180px] md:w-[220px] snap-start cursor-pointer group/card"
             >
               {/* Image Container */}
-              <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#12141c] district-card">
+              <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#0d0d0d] district-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={posterUrl}
@@ -77,18 +77,18 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                 />
 
                 {/* Floating Media Category Badge */}
-                <span className={`absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[9px] ${
+                <span className={`absolute top-3 left-3 z-10 px-2.5 py-0.5 rounded-full text-[9px] font-bold ${
                   isTheatrical 
                     ? "district-badge-lime" 
                     : movie.media_type === "movie" 
-                      ? "district-badge-red" 
+                      ? "district-badge-purple" 
                       : "district-badge-cyan"
                 }`}>
                   {isTheatrical ? "IN THEATRES" : movie.media_type === "movie" ? "Movie" : "Series"}
                 </span>
 
                 {/* Hover overlay with button controls */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                <div className="absolute inset-0 bg-black/90 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
                   <div className="flex gap-2">
                     {isTheatrical ? (
                       <a
@@ -96,7 +96,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[10px] district-btn-primary shadow-lg shadow-[#e23744]/20"
+                        className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[10px] district-btn-primary bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25"
                       >
                         Tickets <ExternalLink size={11} />
                       </a>
@@ -107,7 +107,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                       >
                         {isSaved ? (
                           <>
-                            Saved <Check size={11} className="text-brand" />
+                            Saved <Check size={11} className="text-[#a855f7]" />
                           </>
                         ) : (
                           <>
@@ -126,16 +126,16 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                 </div>
               </div>
 
-              {/* Title & Metadata */}
+              {/* Title & Metadata below the poster */}
               <div className="mt-3.5 px-1">
-                <h3 className="text-sm font-black tracking-tight text-white line-clamp-1 group-hover/card:text-[#e23744] transition-colors leading-snug">
+                <h3 className="text-sm font-black tracking-tight text-white line-clamp-1 group-hover/card:text-[#a855f7] transition-colors leading-snug">
                   {movie.title}
                 </h3>
                 <div className="flex items-center gap-2 mt-1 text-[11px] text-gray-500 font-bold uppercase tracking-wider">
                   <span>{movie.release_date ? new Date(movie.release_date).getFullYear() : "TBA"}</span>
                   {movie.vote_average && movie.vote_average > 0 ? (
-                    <span className="flex items-center gap-0.5 text-amber-500 ml-auto">
-                      <Star size={10} className="fill-amber-500" /> {movie.vote_average.toFixed(1)}
+                    <span className="text-[#a855f7] ml-auto font-black">
+                      Score {movie.vote_average.toFixed(1)}
                     </span>
                   ) : null}
                 </div>
@@ -148,7 +148,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
       {/* Movie Details Modal */}
       {selectedMovie && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="relative w-full max-w-2xl bg-[#12141c] rounded-[32px] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="relative w-full max-w-2xl bg-[#0d0d0d] rounded-[32px] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             {/* Close Button */}
             <button
               onClick={() => setSelectedMovie(null)}
@@ -181,15 +181,14 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                       isTheatrical 
                         ? "district-badge-lime" 
                         : selectedMovie.media_type === "movie" 
-                          ? "district-badge-red" 
+                          ? "district-badge-purple" 
                           : "district-badge-cyan"
                     }`}>
                       {isTheatrical ? "Theatrical Release" : selectedMovie.media_type === "movie" ? "Movie" : "TV Series"}
                     </span>
                     {selectedMovie.vote_average && selectedMovie.vote_average > 0 && (
-                      <span className="text-xs font-black text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                        <Star size={11} className="fill-amber-500" />
-                        {selectedMovie.vote_average.toFixed(1)} / 10
+                      <span className="text-xs font-black text-[#a855f7] bg-[#a855f7]/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                        Score {selectedMovie.vote_average.toFixed(1)} / 10
                       </span>
                     )}
                   </div>
@@ -221,7 +220,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                       href={getBmsLink(selectedMovie.title)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs district-btn-primary shadow-lg shadow-[#e23744]/25"
+                      className="flex-1 flex items-center justify-center gap-2 py-3.5 text-xs district-btn-primary bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25"
                     >
                       Book Showtimes <ExternalLink size={13} />
                     </a>
@@ -234,7 +233,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                     >
                       {localSaved[selectedMovie.id] ? (
                         <>
-                          Saved to Watchlist <Check size={14} className="text-brand" />
+                          Saved to Watchlist <Check size={14} className="text-[#a855f7]" />
                         </>
                       ) : (
                         <>

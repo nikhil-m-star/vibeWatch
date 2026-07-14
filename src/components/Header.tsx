@@ -19,9 +19,13 @@ export default function Header() {
   return (
     <header className="sticky top-0 z-50 w-full flex justify-center py-3 px-4">
       <nav className="flex items-center gap-2 bg-[#11131a]/90 backdrop-blur-2xl px-3 py-2 rounded-full shadow-2xl shadow-black/40">
-        {/* Brand Logo */}
-        <Link href="/" className="h-10 w-10 flex-none rounded-full bg-[#e23744] flex items-center justify-center text-base text-white font-bold shadow-lg shadow-[#e23744]/20 transition-transform hover:scale-105 duration-200">
-          V
+        {/* Brand Logo - Uses generated minimalist purple logo */}
+        <Link href="/" className="h-10 w-10 flex-none rounded-full overflow-hidden transition-transform hover:scale-105 duration-200">
+          <img
+            src="/logo.png"
+            alt="Vibe Watch"
+            className="w-full h-full object-cover"
+          />
         </Link>
 
         {/* Nav Tabs */}
@@ -33,7 +37,7 @@ export default function Header() {
               href={item.href}
               className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 ${
                 isActive
-                  ? "bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white shadow-lg shadow-[#e23744]/25"
+                  ? "bg-[#a855f7] text-white shadow-lg shadow-[#a855f7]/25"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
               }`}
             >
@@ -43,11 +47,11 @@ export default function Header() {
           );
         })}
 
-        {/* Auth Control */}
-        <div className="ml-1">
+        {/* Auth Control - Centered Vertically */}
+        <div className="flex items-center justify-center ml-1">
           {!isSignedIn ? (
             <SignInButton mode="modal">
-              <button className="cursor-pointer h-10 w-10 flex-none rounded-full bg-white/5 hover:bg-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+              <button className="cursor-pointer h-10 w-10 flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all">
                 <UserIcon size={16} />
               </button>
             </SignInButton>
@@ -56,6 +60,7 @@ export default function Header() {
               appearance={{
                 elements: {
                   avatarBox: "h-10 w-10 rounded-full",
+                  userButtonBox: "flex items-center justify-center",
                 },
               }}
             />

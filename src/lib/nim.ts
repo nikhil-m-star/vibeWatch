@@ -144,8 +144,8 @@ ALGORITHM REQUIREMENTS:
 ${releasesList || "No active list available."}
    - If you suggest a title from this list, you MUST mention it clearly in the reason (e.g. "Catch it now in theatres!" or "Keep an eye out for this upcoming release!").
 
-6. IMPORTANT CULTURAL GUIDELINE:
-   - If a user asks for a dark, gritty, or serious "Spider-Man" series or show, you MUST prioritize recommending the upcoming series "Spider-Noir" (TV show) or "Spider-Man: The New Animated Series" (TV show) or "Spider-Man Noir" (TV show).
+6. SPECIFIC FRANCHISE/TONE ALIGNMENT:
+   - If the user asks for a character or franchise in a specific tone (e.g. serious/dark Spider-Man, gritty Batman, lighthearted sci-fi), prioritize recommending the specific entries or spin-offs from that franchise that match the requested tone (e.g. Spider-Man Noir / Mr. Robot for dark themes, rather than unrelated or generic entries).
 
 7. HYPER-PERSONALIZED REASONING:
    - The "reason" MUST connect the title back to the user's specific requested tone and pacing.

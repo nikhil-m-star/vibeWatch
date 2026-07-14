@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, MessageSquare, History, Calendar, Film, Tv, Sparkles, Trash2 } from "lucide-react";
+import { MessageSquare, History, Calendar, Film, Tv, Sparkles, Trash2 } from "lucide-react";
 import { deleteFromHistory } from "@/app/actions/history";
 
 interface ProfileTabsProps {
@@ -14,14 +14,12 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
   const [watchHistory, setWatchHistory] = useState<any[]>(initialHistory);
 
   const handleDeleteHistory = async (tmdbId: number, mediaType: string) => {
-    // Optimistic delete
     setWatchHistory((prev) => prev.filter((item) => !(item.tmdbId === tmdbId && item.mediaType === mediaType)));
 
     try {
       await deleteFromHistory(tmdbId, mediaType as "movie" | "tv");
     } catch (err) {
       console.error(err);
-      // Revert if error
       setWatchHistory(watchHistory);
     }
   };
@@ -29,26 +27,26 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
   return (
     <div className="space-y-8">
       {/* Tab Switcher */}
-      <div className="flex gap-6 text-sm font-semibold tracking-wide">
+      <div className="flex gap-4 text-xs font-bold uppercase tracking-wider">
         <button
           onClick={() => setActiveTab("history")}
-          className={`cursor-pointer pb-4 transition-all flex items-center gap-2 ${
+          className={`cursor-pointer px-5 py-2.5 rounded-full transition-all flex items-center gap-2 ${
             activeTab === "history"
-              ? "bg-[#e23744]/20 text-white"
-              : "bg-transparent text-gray-500 hover:text-gray-300"
+              ? "bg-[#a855f7] text-white"
+              : "bg-white/5 text-gray-500 hover:text-gray-300"
           }`}
         >
-          <History size={16} /> Watch History ({watchHistory.length})
+          <History size={14} /> Watch History ({watchHistory.length})
         </button>
         <button
           onClick={() => setActiveTab("chat")}
-          className={`cursor-pointer pb-4 transition-all flex items-center gap-2 ${
+          className={`cursor-pointer px-5 py-2.5 rounded-full transition-all flex items-center gap-2 ${
             activeTab === "chat"
-              ? "bg-[#e23744]/20 text-white"
-              : "bg-transparent text-gray-500 hover:text-gray-300"
+              ? "bg-[#a855f7] text-white"
+              : "bg-white/5 text-gray-500 hover:text-gray-300"
           }`}
         >
-          <MessageSquare size={16} /> Past Vibe Chats ({pastQueries.length})
+          <MessageSquare size={14} /> Past Vibe Chats ({pastQueries.length})
         </button>
       </div>
 
@@ -56,19 +54,19 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
       {activeTab === "history" && (
         <div className="space-y-4">
           {watchHistory.length === 0 ? (
-            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl">
+            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#0d0d0d] rounded-3xl">
               <History size={24} className="text-gray-600 mb-3" />
-              <p className="text-xs text-gray-500">You haven't marked any titles as watched yet.</p>
+              <p className="text-xs text-gray-500">You have not marked any titles as watched yet.</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 gap-4">
               {watchHistory.map((item) => (
                 <div
                   key={`${item.mediaType}-${item.tmdbId}`}
-                  className="p-4 bg-[#11131a] rounded-2xl transition-colors flex items-center justify-between gap-4"
+                  className="p-4 bg-[#0d0d0d] rounded-2xl flex items-center justify-between gap-4 district-card"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400">
+                    <div className="h-10 w-10 rounded-xl bg-[#a855f7]/10 flex items-center justify-center text-[#c084fc]">
                       {item.mediaType === "movie" ? <Film size={18} /> : <Tv size={18} />}
                     </div>
                     <div>
@@ -78,8 +76,8 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-[10px] text-gray-500 capitalize">{item.mediaType}</span>
                         {item.rating && (
-                          <span className="flex items-center gap-0.5 text-xs text-amber-500 font-extrabold ml-2 bg-amber-500/10 px-1.5 py-0.5 rounded">
-                            <Star size={10} className="fill-amber-500" /> {item.rating} / 5
+                          <span className="text-[9px] font-black uppercase bg-[#a855f7]/10 px-2.5 py-0.5 rounded text-[#c084fc] ml-2">
+                            Rating: {item.rating} / 5
                           </span>
                         )}
                       </div>
@@ -111,7 +109,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
       {activeTab === "chat" && (
         <div className="space-y-6">
           {pastQueries.length === 0 ? (
-            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl">
+            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#0d0d0d] rounded-3xl">
               <MessageSquare size={24} className="text-gray-600 mb-3" />
               <p className="text-xs text-gray-500">No past vibe chat sessions recorded.</p>
             </div>
@@ -124,7 +122,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                 return (
                   <div
                     key={query.id}
-                    className="p-6 bg-[#11131a] rounded-3xl space-y-4"
+                    className="p-6 bg-[#0d0d0d] rounded-3xl space-y-4 district-card"
                   >
                     {/* Query Metadata Header */}
                     <div className="flex flex-wrap items-center justify-between gap-2 pb-4">
@@ -145,7 +143,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                           {tags.tone.slice(0, 3).map((tone: string) => (
                             <span
                               key={tone}
-                              className="text-[9px] font-black uppercase tracking-wider bg-orange-500/10 px-2.5 py-0.5 rounded-full text-orange-400"
+                              className="text-[9px] font-black uppercase tracking-wider bg-[#a855f7]/10 px-2.5 py-0.5 rounded-full text-[#c084fc]"
                             >
                               {tone}
                             </span>
@@ -159,7 +157,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                       <span className="text-[9px] uppercase tracking-wide font-extrabold text-gray-500 block mb-1">
                         Opening Vibe Request
                       </span>
-                      <p className="text-xs md:text-sm text-gray-200 leading-relaxed font-medium italic">
+                      <p className="text-xs md:text-sm text-gray-200 leading-relaxed font-medium">
                         "{userMsg}"
                       </p>
                     </div>
@@ -167,7 +165,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                     {/* Recommendations List */}
                     <div className="space-y-3 pt-2">
                       <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 flex items-center gap-1.5">
-                        <Sparkles size={11} className="text-orange-400" /> Generated Suggestions ({query.recommendations?.length || 0})
+                        <Sparkles size={11} className="text-[#a855f7]" /> Generated Suggestions ({query.recommendations?.length || 0})
                       </span>
                       <div className="grid sm:grid-cols-2 gap-3">
                         {query.recommendations?.map((rec: any) => (

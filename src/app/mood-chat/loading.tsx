@@ -1,10 +1,10 @@
 export default function Loading() {
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-76px)] overflow-hidden relative bg-[#07080c] animate-pulse">
+    <div className="flex-1 flex flex-col h-[calc(100vh-76px)] overflow-hidden relative bg-black animate-pulse">
       {/* Centered empty state skeleton */}
       <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-6">
         <div className="flex items-center gap-2">
-          <div className="h-2.5 w-2.5 rounded-full bg-[#e23744]/20" />
+          <div className="h-2.5 w-2.5 rounded-full bg-[#a855f7]/20" />
           <div className="h-3 w-20 bg-white/5 rounded" />
         </div>
         <div className="h-8 w-56 bg-white/5 rounded-lg" />
@@ -17,9 +17,9 @@ export default function Loading() {
 
       {/* Floating pill skeleton */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-xl">
-        <div className="flex items-center gap-2 bg-[#11131a]/90 rounded-full px-4 py-2.5 h-[52px]">
+        <div className="flex items-center gap-2 bg-[#11131a]/95 rounded-full px-4 py-2.5 h-[52px]">
           <div className="flex-1 h-4 bg-white/5 rounded" />
-          <div className="h-8 w-8 rounded-full bg-[#e23744]/15" />
+          <div className="h-8 w-8 rounded-full bg-[#a855f7]/15" />
         </div>
       </div>
     </div>

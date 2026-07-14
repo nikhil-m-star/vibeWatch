@@ -3,13 +3,11 @@
 import { useState, useRef, useEffect } from "react";
 import { sendChatMessage } from "@/app/actions/chat";
 import { toggleWatchlist, isTitleSaved } from "@/app/actions/watchlist";
-import { markAsWatched } from "@/app/actions/history";
 import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Sparkles, Check, Star, 
-  Loader2, ArrowUp, X, ExternalLink, RotateCcw
+  Sparkles, Check, Loader2, ArrowUp, ExternalLink, RotateCcw
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -26,10 +24,8 @@ export default function MoodChatPage() {
   const [providers, setProviders] = useState<Record<number, WatchProvider[]>>({});
   const [savedIds, setSavedIds] = useState<Record<number, boolean>>({});
   
-  // Rating states
-  const [activeRatingMovieId, setActiveRatingMovieId] = useState<number | null>(null);
-  const [ratingValue, setRatingValue] = useState<number>(5);
-  const [watchedRecord, setWatchedRecord] = useState<Record<number, boolean>>({});
+  // Error handling
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // Derive latest messages for the floating pill
   const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content || null;
@@ -53,6 +49,7 @@ export default function MoodChatPage() {
     if (!text.trim() || isLoading) return;
 
     if (!textToSend) setInputText("");
+    setErrorMessage(null);
     
     const userMsg: ChatMessage = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
@@ -60,6 +57,14 @@ export default function MoodChatPage() {
 
     try {
       const res = await sendChatMessage(queryId, text);
+      
+      // Check if response contains a rate-limiting message or general error
+      if ((res as any).error) {
+        setErrorMessage((res as any).message || "Something went wrong.");
+        setIsLoading(false);
+        return;
+      }
+
       setQueryId(res.queryId);
       setMessages(res.conversation);
       
@@ -67,17 +72,9 @@ export default function MoodChatPage() {
         setIsReady(true);
         setRecommendations(res.recommendations);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "Something went wrong. Here are some picks for you." }
-      ]);
-      setIsReady(true);
-      setRecommendations([
-        { tmdbId: 27205, title: "Inception", mediaType: "movie", posterPath: "/o0Qywl1ILK75h0uz2gfwH6D7c5C.jpg", reason: "A mind-bending masterpiece." },
-        { tmdbId: 155, title: "The Dark Knight", mediaType: "movie", posterPath: "/qJ2tWw3pmIv3gh7pb2uC0nSdqK1.jpg", reason: "An epic crime thriller." }
-      ]);
+      setErrorMessage(err.message || "Too many requests. Please try again in a minute.");
     } finally {
       setIsLoading(false);
     }
@@ -96,21 +93,6 @@ export default function MoodChatPage() {
     }
   };
 
-  const handleWatchedClick = (tmdbId: number) => {
-    setActiveRatingMovieId(tmdbId);
-    setRatingValue(5);
-  };
-
-  const handleSaveWatched = async (rec: any) => {
-    try {
-      await markAsWatched(rec.tmdbId, rec.title, rec.mediaType, ratingValue);
-      setWatchedRecord((prev) => ({ ...prev, [rec.tmdbId]: true }));
-      setActiveRatingMovieId(null);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   const startNewSession = () => {
     setQueryId(null);
     setMessages([]);
@@ -118,36 +100,36 @@ export default function MoodChatPage() {
     setRecommendations([]);
     setProviders({});
     setSavedIds({});
-    setWatchedRecord({});
+    setErrorMessage(null);
   };
 
   // Preset chips for the empty state
   const presets = [
-    "Something light & fun",
-    "Emotional drama to cry",
+    "Something light and fun",
+    "Emotional drama to watch",
     "Fast-paced thriller",
     "Background noise for studying",
-    "Dark spiderman series",
+    "Dark superhero series",
     "Mind-bending sci-fi"
   ];
 
   return (
-    <div className="flex-1 flex flex-col h-[calc(100vh-68px)] overflow-hidden relative bg-[#07080c]">
+    <div className="flex-1 flex flex-col h-[calc(100vh-68px)] overflow-hidden relative bg-black">
       {/* Full-Page Content Area */}
       <div className="flex-1 overflow-y-auto scrollbar-none pb-32">
         {!isReady && !isLoading && messages.length === 0 ? (
           /* ===== EMPTY STATE: centered prompt ===== */
           <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#e23744]/5 rounded-full blur-[100px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#a855f7]/5 rounded-full blur-[100px] pointer-events-none" />
             
             <div className="relative z-10 space-y-6 max-w-md">
               <div className="flex items-center justify-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#e23744] animate-pulse" />
+                <span className="h-2.5 w-2.5 rounded-full bg-[#a855f7] animate-pulse" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">AI Concierge</span>
               </div>
               
               <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                What's your <span className="text-[#ff4d5d]">vibe</span> today?
+                What is your <span className="text-[#a855f7]">vibe</span> today?
               </h1>
 
               <div className="flex flex-wrap gap-2 justify-center">
@@ -169,7 +151,7 @@ export default function MoodChatPage() {
         ) : !isReady ? (
           /* ===== PROCESSING STATE: show user query + AI thinking ===== */
           <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#e23744]/5 rounded-full blur-[90px] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#a855f7]/5 rounded-full blur-[90px] pointer-events-none" />
             
             <div className="relative z-10 space-y-5 max-w-sm">
               {lastUserMsg && (
@@ -181,15 +163,21 @@ export default function MoodChatPage() {
 
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2.5 py-3">
-                  <Loader2 size={14} className="animate-spin text-[#ff4d5d]" />
+                  <Loader2 size={14} className="animate-spin text-[#a855f7]" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Finding your matches...</span>
                 </div>
               ) : lastAiMsg ? (
                 <div className="bg-white/[0.03] rounded-2xl p-4">
-                  <span className="text-[8px] font-black uppercase tracking-widest text-[#ff4d5d] block mb-2">AI Response</span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-[#a855f7] block mb-2">AI Response</span>
                   <p className="text-xs text-gray-300 leading-relaxed">{lastAiMsg}</p>
                 </div>
               ) : null}
+
+              {errorMessage && (
+                <div className="bg-red-500/10 border-l-2 border-red-500 rounded-lg p-3 text-left">
+                  <p className="text-xs text-red-400 font-semibold">{errorMessage}</p>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -198,7 +186,7 @@ export default function MoodChatPage() {
             {/* Results Header */}
             <div className="flex items-center justify-between pb-4">
               <h1 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
-                <Sparkles size={14} className="text-[#ff4d5d]" />
+                <Sparkles size={14} className="text-[#a855f7]" />
                 VIBE RESULTS
               </h1>
               <button
@@ -210,27 +198,19 @@ export default function MoodChatPage() {
               </button>
             </div>
 
-            {/* Cards Grid */}
+            {/* Cards Grid with Vertical Rectangle aspect ratios and text underneath */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendations.map((rec) => {
                 const isSaved = !!savedIds[rec.tmdbId];
-                const isWatched = !!watchedRecord[rec.tmdbId];
                 const recProviders = providers[rec.tmdbId] || [];
 
                 return (
                   <div
                     key={rec.id || rec.tmdbId}
-                    className="group flex flex-col bg-[#11131a] rounded-[28px] overflow-hidden transition-all shadow-lg hover:shadow-2xl relative duration-300 district-card"
+                    className="group flex flex-col snap-start cursor-pointer"
                   >
-                    {/* Media Type Tag */}
-                    <span className={`absolute top-3.5 left-3.5 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
-                      rec.mediaType === "movie" ? "district-badge-red" : "district-badge-cyan"
-                    }`}>
-                      {rec.mediaType === "movie" ? "Movie" : "TV Show"}
-                    </span>
-
-                    {/* Poster */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-gray-900">
+                    {/* Poster Container - strictly vertical aspect-[2/3] */}
+                    <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#0d0d0d] district-card">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={
@@ -241,18 +221,49 @@ export default function MoodChatPage() {
                         alt={rec.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent" />
-                      
-                      <div className="absolute bottom-3.5 left-3.5 right-3.5">
-                        <h3 className="text-sm font-black text-white leading-snug uppercase">
-                          {rec.title}
-                        </h3>
+
+                      {/* Media Type Tag */}
+                      <span className={`absolute top-3.5 left-3.5 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
+                        rec.mediaType === "movie" ? "district-badge-purple" : "district-badge-cyan"
+                      }`}>
+                        {rec.mediaType === "movie" ? "Movie" : "TV Show"}
+                      </span>
+
+                      {/* Hover overlay with button controls only */}
+                      <div className="absolute inset-0 bg-black/90 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleToggleWatchlist(rec)}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary"
+                          >
+                            {isSaved ? (
+                              <>Saved <Check size={10} className="text-[#a855f7]" /></>
+                            ) : (
+                              <>Save</>
+                            )}
+                          </button>
+
+                          {rec.mediaType === "movie" && (
+                            <a
+                              href={`https://www.google.com/search?q=bookmyshow+${encodeURIComponent(rec.title)}+tickets`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-1.5 py-2.5 px-3 text-[9px] district-btn-primary bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25"
+                            >
+                              Tickets <ExternalLink size={10} />
+                            </a>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-5 flex-1 flex flex-col justify-between gap-5">
-                      <p className="text-[11px] text-gray-300 leading-relaxed font-semibold italic bg-white/[0.02] p-3.5 rounded-xl">
+                    {/* Metadata details underneath the image */}
+                    <div className="mt-3.5 px-1 space-y-2">
+                      <h3 className="text-sm font-black text-white leading-snug uppercase tracking-wide">
+                        {rec.title}
+                      </h3>
+                      
+                      <p className="text-[11px] text-gray-300 leading-relaxed font-semibold bg-[#0d0d0d] p-3.5 rounded-xl">
                         {rec.reason}
                       </p>
 
@@ -270,92 +281,7 @@ export default function MoodChatPage() {
                           ))}
                         </div>
                       )}
-
-                      {/* Controls */}
-                      <div className="pt-3.5 flex flex-col gap-2">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleToggleWatchlist(rec)}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary hover:scale-[1.02] transition-transform"
-                          >
-                            {isSaved ? (
-                              <>Saved <Check size={10} className="text-emerald-400" /></>
-                            ) : (
-                              <>Save</>
-                            )}
-                          </button>
-
-                          <button
-                            onClick={() => handleWatchedClick(rec.tmdbId)}
-                            disabled={isWatched}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary text-[#ff4d5d] disabled:opacity-40 hover:scale-[1.02] transition-transform"
-                          >
-                            {isWatched ? "Watched" : "Rate"}
-                          </button>
-                        </div>
-
-                        {rec.mediaType === "movie" && (
-                          <a
-                            href={`https://www.google.com/search?q=bookmyshow+${encodeURIComponent(rec.title)}+tickets`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-primary bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white shadow-lg shadow-[#e23744]/20 hover:scale-[1.02] transition-all"
-                          >
-                            Tickets <ExternalLink size={10} />
-                          </a>
-                        )}
-                      </div>
                     </div>
-
-                    {/* Star Rating Overlay */}
-                    {activeRatingMovieId === rec.tmdbId && (
-                      <div className="absolute inset-0 bg-black/95 z-20 flex flex-col items-center justify-center p-6 space-y-4 animate-in fade-in duration-200">
-                        <button
-                          onClick={() => setActiveRatingMovieId(null)}
-                          className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                        >
-                          <X size={16} />
-                        </button>
-                        <h4 className="text-[10px] font-black uppercase tracking-wider text-white text-center">
-                          Rate this title
-                        </h4>
-                        
-                        <div className="flex gap-1.5">
-                          {[1, 2, 3, 4, 5].map((star) => (
-                            <button
-                              key={star}
-                              type="button"
-                              onClick={() => setRatingValue(star)}
-                              className="cursor-pointer text-xl text-amber-500 focus:outline-none"
-                            >
-                              <Star
-                                size={20}
-                                className={
-                                  star <= ratingValue
-                                    ? "fill-amber-500 text-amber-500"
-                                    : "text-gray-700"
-                                }
-                              />
-                            </button>
-                          ))}
-                        </div>
-
-                        <div className="flex gap-2 w-full pt-2">
-                          <button
-                            onClick={() => handleSaveWatched(rec)}
-                            className="cursor-pointer flex-1 py-2 text-[9px] district-btn-primary shadow-lg"
-                          >
-                            Save
-                          </button>
-                          <button
-                            onClick={() => handleSaveWatched({ ...rec, ratingValue: null })}
-                            className="cursor-pointer flex-1 py-2 text-[9px] district-btn-secondary"
-                          >
-                            Skip
-                          </button>
-                        </div>
-                      </div>
-                    )}
                   </div>
                 );
               })}
@@ -371,9 +297,9 @@ export default function MoodChatPage() {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center gap-2 bg-[#11131a]/90 backdrop-blur-2xl rounded-full px-4 py-2.5 shadow-2xl shadow-black/50"
+          className="flex items-center gap-2 bg-[#11131a]/95 backdrop-blur-2xl rounded-full px-4 py-2.5 shadow-2xl shadow-black/50"
         >
-          {/* Reset button (only when there's an active session) */}
+          {/* Reset button */}
           {(messages.length > 0 || isReady) && (
             <button
               type="button"
@@ -391,13 +317,13 @@ export default function MoodChatPage() {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder={isReady ? "Ask for something else..." : "Describe your vibe..."}
-            className="flex-1 min-w-0 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none disabled:opacity-50 py-1"
+            className="flex-1 min-w-0 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none disabled:opacity-50 py-1 font-semibold"
           />
 
           <button
             type="submit"
             disabled={!inputText.trim() || isLoading}
-            className="cursor-pointer h-8 w-8 flex-none flex items-center justify-center rounded-full bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white disabled:opacity-25 disabled:pointer-events-none transition-all shadow-lg shadow-[#e23744]/20 hover:scale-105"
+            className="cursor-pointer h-8 w-8 flex-none flex items-center justify-center rounded-full bg-[#a855f7] hover:bg-[#b55fe6] text-white disabled:opacity-25 disabled:pointer-events-none transition-all shadow-lg shadow-[#a855f7]/20 hover:scale-105"
           >
             <ArrowUp size={14} strokeWidth={2.5} />
           </button>
