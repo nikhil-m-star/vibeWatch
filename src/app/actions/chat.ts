@@ -99,7 +99,7 @@ export async function sendChatMessage(queryId: string | null, messageText: strin
             return {
               tmdbId: tmdbMeta.id,
               title: tmdbMeta.title,
-              mediaType: rec.mediaType,
+              mediaType: tmdbMeta.media_type,
               posterPath: tmdbMeta.poster_path,
               reason: rec.reason,
             };
