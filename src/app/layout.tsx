@@ -1,13 +1,13 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import Header from "@/components/Header";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const plusJakartaSans = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -21,7 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${poppins.variable} h-full antialiased`}>
+    <html lang="en" className={`${plusJakartaSans.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-black text-gray-100 pb-8 font-sans">
         <ClerkProvider>
           {/* Main Top Header Navbar (Dynamic Client Component) */}
