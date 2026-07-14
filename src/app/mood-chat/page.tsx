@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { sendChatMessage, getReplacementRecommendation } from "@/app/actions/chat";
 import { toggleWatchlist, isTitleSaved } from "@/app/actions/watchlist";
 import { markAsWatched } from "@/app/actions/history";
-import { getProvidersAction } from "@/app/actions/tmdb";
+import { getProvidersAction, getTrendingPosterPaths } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
@@ -13,14 +13,14 @@ import {
 import { useRouter } from "next/navigation";
 
 const loadingPosters = [
-  "https://image.tmdb.org/t/p/w300/gEU2QvIPwc3hzvbxY22j9vj6xhR.jpg", // Interstellar
-  "https://image.tmdb.org/t/p/w300/qJ2tWUBRxtImjPn8v2oDejP82m7.jpg", // The Dark Knight
-  "https://image.tmdb.org/t/p/w300/o045BRj5QZg75n433hK3uU7n07R.jpg", // Inception
-  "https://image.tmdb.org/t/p/w300/49WJfeN0mhmmRLxs7w74T0Pr6m4.jpg", // Stranger Things
-  "https://image.tmdb.org/t/p/w300/ztkUQv6v14SNv6B15972NgnG9e0.jpg", // Breaking Bad
-  "https://image.tmdb.org/t/p/w300/9PF5cSBw24uw4Jn5fkZq562tGsr.jpg", // Wednesday
-  "https://image.tmdb.org/t/p/w300/ii8Q0mZtW3ld9JFkn63fXc51ADd.jpg", // Spider-Verse
-  "https://image.tmdb.org/t/p/w300/t6oz0VzQjNIPFUw4sqU6OKEDthY.jpg"  // Avatar
+  "https://image.tmdb.org/t/p/w500/vpnVM9B6NMmAAgqHgNAVt7lOIHi.jpg",
+  "https://image.tmdb.org/t/p/w500/8cdWjv4cZaEUTMclKA5aLEz51fR.jpg",
+  "https://image.tmdb.org/t/p/w500/wWba30VFTilV2814vRBEJy6STlh.jpg",
+  "https://image.tmdb.org/t/p/w500/czemb421NaKzX7IN4VlQizLVy2C.jpg",
+  "https://image.tmdb.org/t/p/w500/oM6gJ7A57l2Pt2hXNuJpBTpUI6C.jpg",
+  "https://image.tmdb.org/t/p/w500/yrp1547fyjj56n1f56s9n9Xzs9b.jpg",
+  "https://image.tmdb.org/t/p/w500/iADOOC62nwjoPL6Bo4vyFBTCKy2.jpg",
+  "https://image.tmdb.org/t/p/w500/pExEnmgiej7uMo0946200ZgUgkI.jpg"
 ];
 
 export default function MoodChatPage() {
@@ -40,17 +40,29 @@ export default function MoodChatPage() {
   // Error handling
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loadingActiveIndex, setLoadingActiveIndex] = useState(0);
+  const [trendingPosters, setTrendingPosters] = useState<string[]>([]);
 
-  // Rotate loading posters ribbon while AI query is executing
+  // Load live trending posters from TMDB on client mount
+  useEffect(() => {
+    getTrendingPosterPaths().then((paths) => {
+      if (paths && paths.length > 0) {
+        setTrendingPosters(paths);
+      }
+    });
+  }, []);
+
+  const activePosters = trendingPosters.length > 0 ? trendingPosters : loadingPosters;
+
+  // Rotate loading posters ribbon while AI query is executing (smooth right-to-left shift)
   useEffect(() => {
     let interval: any;
     if (isLoading) {
       interval = setInterval(() => {
-        setLoadingActiveIndex((prev) => (prev + 1) % loadingPosters.length);
-      }, 1000);
+        setLoadingActiveIndex((prev) => (prev + 1) % activePosters.length);
+      }, 850);
     }
     return () => clearInterval(interval);
-  }, [isLoading]);
+  }, [isLoading, activePosters.length]);
 
   // Derive latest messages for the floating pill
   const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content || null;
@@ -248,14 +260,14 @@ export default function MoodChatPage() {
               )}
 
               {isLoading ? (
-                <div className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-10 flex items-center justify-center">
+                <div className="w-screen ml-[calc(-50vw+50%)] overflow-hidden py-8 flex items-center justify-center">
                   {/* Cinematic smooth ribbon stretching edge-to-edge */}
                   <div className="w-full py-4 flex items-center justify-center gap-4 md:gap-6 mx-auto">
                     {(() => {
                       const offsets = [-2, -1, 0, 1, 2];
                       return offsets.map((offset) => {
-                        const idx = (loadingActiveIndex + offset + loadingPosters.length) % loadingPosters.length;
-                        const poster = loadingPosters[idx];
+                        const idx = (loadingActiveIndex + offset + activePosters.length) % activePosters.length;
+                        const poster = activePosters[idx];
                         
                         // Dynamic properties based on center distance
                         let scaleClass = "";
@@ -279,7 +291,7 @@ export default function MoodChatPage() {
                         return (
                           <div
                             key={`${idx}-${offset}`}
-                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[1000ms] ease-in-out transform flex-none ${scaleClass} ${opacityClass} ${sizeClass}`}
+                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[850ms] ease-in-out transform flex-none ${scaleClass} ${opacityClass} ${sizeClass}`}
                           >
                             <img
                               src={poster}
