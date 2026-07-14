@@ -17,45 +17,38 @@ export default function Header() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 w-full district-panel py-4 px-4 md:px-8">
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
+    <header className="sticky top-0 z-50 w-full flex justify-center py-3 px-4">
+      <nav className="flex items-center gap-1 bg-[#11131a]/90 backdrop-blur-2xl border border-white/10 p-1.5 rounded-full shadow-2xl shadow-black/40">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-2 group">
-          <span className="h-9 w-9 rounded-xl bg-[#e23744] flex items-center justify-center text-base text-white font-black shadow-lg shadow-[#e23744]/20 transition-transform group-hover:scale-105 duration-200">
-            V
-          </span>
-          <span className="hidden sm:inline text-sm font-black tracking-widest text-white uppercase">
-            VIBE WATCH
-          </span>
+        <Link href="/" className="h-9 w-9 flex-none rounded-full bg-[#e23744] flex items-center justify-center text-sm text-white font-black shadow-lg shadow-[#e23744]/20 transition-transform hover:scale-105 duration-200 mr-1">
+          V
         </Link>
 
-        {/* Navigation Tabs */}
-        <nav className="flex items-center gap-1 bg-black/50 border border-white/10 p-1.5 rounded-full shadow-inner">
-          {navItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white shadow-lg shadow-[#e23744]/25 scale-[1.03]"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <item.icon size={15} />
-                <span className="hidden sm:inline">{item.name}</span>
-              </Link>
-            );
-          })}
-        </nav>
+        {/* Nav Tabs */}
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all duration-300 ${
+                isActive
+                  ? "bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white shadow-lg shadow-[#e23744]/25"
+                  : "text-gray-400 hover:text-white hover:bg-white/5"
+              }`}
+            >
+              <item.icon size={15} />
+              <span className="hidden sm:inline">{item.name}</span>
+            </Link>
+          );
+        })}
 
-        {/* Clerk Auth Controls */}
-        <div className="flex items-center">
+        {/* Auth Control */}
+        <div className="ml-1">
           {!isSignedIn ? (
             <SignInButton mode="modal">
-              <button className="cursor-pointer text-[10px] font-black uppercase tracking-wider bg-[#e23744] text-white px-5 py-2.5 rounded-xl hover:opacity-90 transition-opacity shadow-md shadow-[#e23744]/15">
-                Sign In
+              <button className="cursor-pointer h-9 w-9 flex-none rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                <UserIcon size={15} />
               </button>
             </SignInButton>
           ) : (
@@ -68,7 +61,7 @@ export default function Header() {
             />
           )}
         </div>
-      </div>
+      </nav>
     </header>
   );
 }
