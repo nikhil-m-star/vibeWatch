@@ -62,67 +62,7 @@ export async function interpretMoodAndQuestion(
   conversation: ChatMessage[],
   watchHistory: { title: string; mediaType: string; rating: number | null }[]
 ): Promise<InterpretedMood> {
-  const assistantTurns = conversation.filter((m) => m.role === "assistant");
-  
-  // Cap at 3 follow-up questions
-  if (assistantTurns.length >= 3) {
-    return interpretFinalTags(conversation, watchHistory);
-  }
-
-  // Check if user requested to skip to recommendations
-  const lastUserMsg = [...conversation].reverse().find((m) => m.role === "user")?.content.toLowerCase() || "";
-  const isSkip = lastUserMsg.includes("skip") || 
-                 lastUserMsg.includes("just recommend") || 
-                 lastUserMsg.includes("show me") || 
-                 lastUserMsg.includes("direct recommend") ||
-                 lastUserMsg.includes("don't want to answer");
-
-  if (isSkip) {
-    return interpretFinalTags(conversation, watchHistory);
-  }
-
-  const systemPrompt = `You are Vibe Watch's premium concierge assistant. Your job is to interpret the user's emotional state or mood and determine if you have enough context to recommend movies or TV shows.
-You can ask up to 3 targeted follow-up questions total to narrow things down (focusing on genre preference, movie vs series, time available, energy level).
-Currently, you have already asked ${assistantTurns.length} questions.
-
-If you have enough detail (genres, tone, pacing preferences) OR if you have reached the limit of 3 questions, set readyToRecommend to true. Otherwise, set it to false and ask ONE short, engaging follow-up question.
-Do NOT ask more than one question. Keep the question premium, concise, and focused.
-
-Your response MUST be a JSON object with this exact structure:
-{
-  "readyToRecommend": boolean,
-  "followUpQuestion": "your follow up question string here" or null,
-  "interpretedTags": {
-    "genres": ["list", "of", "genres"],
-    "tone": ["list", "of", "tones"],
-    "pacing": "fast" | "medium" | "slow"
-  } or null
-}
-
-Watch History context (use this to avoid recommending previously watched/rated titles unless requested):
-${JSON.stringify(watchHistory)}
-`;
-
-  const responseText = await callNIM([
-    { role: "system", content: systemPrompt },
-    ...conversation,
-  ], true);
-
-  try {
-    return JSON.parse(responseText.trim()) as InterpretedMood;
-  } catch (error) {
-    console.error("Failed to parse NIM response as JSON:", responseText, error);
-    // Safe fallback
-    return {
-      readyToRecommend: true,
-      followUpQuestion: null,
-      interpretedTags: {
-        genres: ["Drama"],
-        tone: ["Emotional"],
-        pacing: "medium",
-      },
-    };
-  }
+  return interpretFinalTags(conversation, watchHistory);
 }
 
 async function interpretFinalTags(

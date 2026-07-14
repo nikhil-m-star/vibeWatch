@@ -1,19 +1,37 @@
-import { Loader2 } from "lucide-react";
-
 export default function Loading() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center min-h-[60vh] bg-[#090a0f]">
-      <div className="flex flex-col items-center gap-4">
-        {/* Sleek Pulse Loader */}
-        <div className="relative flex items-center justify-center">
-          <div className="h-12 w-12 rounded-2xl bg-[#e23744]/15 border border-[#e23744]/30 animate-pulse flex items-center justify-center">
-            <span className="text-white font-black text-lg">V</span>
-          </div>
-          <div className="absolute inset-0 rounded-2xl border border-[#e23744]/40 animate-ping opacity-25" />
+    <div className="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 space-y-12 animate-pulse">
+      {/* Hero Banner Skeleton */}
+      <div className="w-full h-[220px] rounded-[24px] bg-[#12141c] border border-white/5 flex flex-col justify-center items-center p-8 space-y-4">
+        <div className="h-8 w-2/3 sm:w-1/2 bg-white/5 rounded-lg" />
+        <div className="h-4 w-1/3 bg-white/5 rounded-lg" />
+        <div className="h-10 w-28 bg-[#e23744]/10 rounded-xl" />
+      </div>
+
+      {/* Category Pills Skeleton */}
+      <div className="flex gap-3 overflow-hidden">
+        {[1, 2, 3, 4].map((i) => (
+          <div key={i} className="h-8 w-20 sm:w-24 bg-white/5 rounded-full flex-none" />
+        ))}
+      </div>
+
+      {/* Section 1 Grid Skeleton */}
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <div className="h-6 w-32 bg-white/5 rounded-lg" />
+          <div className="h-4 w-12 bg-white/5 rounded-lg" />
         </div>
-        <span className="text-[10px] font-black uppercase tracking-widest text-gray-500 animate-pulse">
-          Loading Vibe...
-        </span>
+        
+        {/* Horizontal Row of Skeletons */}
+        <div className="flex gap-6 overflow-hidden">
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="flex-none w-[180px] md:w-[220px] space-y-3">
+              <div className="aspect-[2/3] w-full rounded-[24px] bg-[#12141c] border border-white/5" />
+              <div className="h-4 w-5/6 bg-white/5 rounded" />
+              <div className="h-3 w-1/2 bg-white/5 rounded" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

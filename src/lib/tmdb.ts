@@ -211,3 +211,62 @@ export async function fetchWatchProviders(id: number, type: "movie" | "tv"): Pro
 
   return Array.from(providersMap.values());
 }
+
+export async function fetchTrending(): Promise<TMDBMovie[]> {
+  const data = await fetchFromTMDB("/trending/all/day", {
+    language: "en-US",
+    page: "1",
+  });
+  if (!data || !data.results) return [];
+  return data.results.map((item: any) => ({
+    id: item.id,
+    title: item.media_type === "tv" ? item.name : item.title,
+    overview: item.overview,
+    poster_path: item.poster_path,
+    backdrop_path: item.backdrop_path,
+    release_date: item.media_type === "tv" ? item.first_air_date : item.release_date,
+    media_type: item.media_type as "movie" | "tv",
+    vote_average: item.vote_average,
+  }));
+}
+
+export async function fetchRecent(): Promise<TMDBMovie[]> {
+  const movieData = await fetchFromTMDB("/movie/popular", {
+    language: "en-US",
+    page: "1",
+  });
+  const tvData = await fetchFromTMDB("/tv/popular", {
+    language: "en-US",
+    page: "1",
+  });
+
+  const movies = movieData?.results?.map((item: any) => ({
+    id: item.id,
+    title: item.title,
+    overview: item.overview,
+    poster_path: item.poster_path,
+    backdrop_path: item.backdrop_path,
+    release_date: item.release_date,
+    media_type: "movie" as const,
+    vote_average: item.vote_average,
+  })) || [];
+
+  const tvShows = tvData?.results?.map((item: any) => ({
+    id: item.id,
+    title: item.name,
+    overview: item.overview,
+    poster_path: item.poster_path,
+    backdrop_path: item.backdrop_path,
+    release_date: item.first_air_date,
+    media_type: "tv" as const,
+    vote_average: item.vote_average,
+  })) || [];
+
+  const recentList: TMDBMovie[] = [];
+  const max = Math.max(movies.length, tvShows.length);
+  for (let i = 0; i < max; i++) {
+    if (movies[i]) recentList.push(movies[i]);
+    if (tvShows[i]) recentList.push(tvShows[i]);
+  }
+  return recentList;
+}
