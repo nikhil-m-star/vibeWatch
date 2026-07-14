@@ -262,7 +262,7 @@ export default function MoodChatPage() {
               {isLoading ? (
                 <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-500">
                   {/* Cinematic smooth ribbon stretching edge-to-edge across screen */}
-                  <div className="w-screen h-[240px] md:h-[350px] relative overflow-hidden flex items-center justify-center">
+                  <div className="w-screen h-[300px] md:h-[480px] relative overflow-hidden flex items-center justify-center">
                     {activePosters.map((poster, index) => {
                       // Calculate circular loop distance relative to active index
                       let diff = index - loadingActiveIndex;
@@ -280,19 +280,19 @@ export default function MoodChatPage() {
                       
                       if (isVisible) {
                         if (diff === 0) {
-                          scale = 1.18;
+                          scale = 1.28;
                           opacity = 1;
                           zIndex = 30;
                         } else if (Math.abs(diff) === 1) {
-                          scale = 0.92;
+                          scale = 0.90;
                           opacity = 0.45;
                           zIndex = 20;
                         } else if (Math.abs(diff) === 2) {
-                          scale = 0.72;
+                          scale = 0.65;
                           opacity = 0.15;
                           zIndex = 10;
                         } else {
-                          scale = 0.52;
+                          scale = 0.45;
                           opacity = 0.05;
                           zIndex = 0;
                         }
@@ -306,7 +306,7 @@ export default function MoodChatPage() {
                             opacity: opacity,
                             zIndex: zIndex,
                           }}
-                          className="absolute left-1/2 top-1/2 w-28 h-42 md:w-44 md:h-66 rounded-2xl overflow-hidden bg-[#0d0d0d] shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-[850ms] ease-in-out transform-gpu flex-none"
+                          className="absolute left-1/2 top-1/2 w-32 h-48 md:w-52 md:h-78 rounded-2xl overflow-hidden bg-[#0d0d0d] shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-[850ms] ease-in-out transform-gpu flex-none"
                         >
                           <img
                             src={poster}
