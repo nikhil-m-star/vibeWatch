@@ -62,7 +62,7 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
 
   if (items.length === 0) {
     return (
-      <div className="h-[300px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl border border-white/5">
+      <div className="h-[300px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl">
         <Play size={32} className="text-gray-600 mb-4" />
         <h3 className="text-sm font-bold text-gray-300 mb-1">Your Watchlist is empty</h3>
         <p className="text-xs text-gray-500 max-w-[280px] leading-relaxed">
@@ -84,15 +84,15 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
         return (
           <div
             key={`${item.mediaType}-${item.tmdbId}`}
-            className="group flex flex-col bg-[#11131a] rounded-3xl overflow-hidden border border-white/5 hover:border-white/10 transition-colors shadow-lg glow-card relative"
+            className="group flex flex-col bg-[#11131a] rounded-3xl overflow-hidden transition-colors shadow-lg glow-card relative"
           >
             {/* Media Type Overlay */}
-            <span className="absolute top-3 left-3 z-10 text-[9px] font-black uppercase tracking-wider bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full border border-white/5 text-gray-300">
+            <span className="absolute top-3 left-3 z-10 text-[9px] font-black uppercase tracking-wider bg-black/60 backdrop-blur-md px-2.5 py-0.5 rounded-full text-gray-300">
               {item.mediaType === "movie" ? "Movie" : "Series"}
             </span>
 
             {/* Poster aspect */}
-            <div className="relative aspect-[2/3] bg-gray-900 border-b border-white/5 overflow-hidden">
+            <div className="relative aspect-[2/3] bg-gray-900 overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={posterUrl}
@@ -129,7 +129,7 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
                       <div
                         key={prov.provider_id}
                         title={prov.provider_name}
-                        className="h-6 w-6 rounded-lg overflow-hidden border border-white/10"
+                        className="h-6 w-6 rounded-lg overflow-hidden"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
@@ -158,11 +158,11 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-2 border-t border-white/5 flex gap-2">
+              <div className="pt-2 flex gap-2">
                 {/* Remove */}
                 <button
                   onClick={() => handleRemove(item)}
-                  className="cursor-pointer flex-1 flex items-center justify-center text-[10px] font-extrabold uppercase py-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl transition-colors"
+                  className="cursor-pointer flex-1 flex items-center justify-center text-[10px] font-extrabold uppercase py-2 bg-white/5 hover:bg-white/10 text-white rounded-xl transition-colors"
                 >
                   Unsave
                 </button>
@@ -171,7 +171,7 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
                 <button
                   onClick={() => handleWatchedClick(item.tmdbId)}
                   disabled={isWatched}
-                  className="cursor-pointer flex-1 flex items-center justify-center text-[10px] font-extrabold uppercase py-2 bg-orange-500/10 hover:bg-orange-500/20 border border-orange-500/20 text-orange-400 rounded-xl transition-colors disabled:opacity-40 disabled:pointer-events-none"
+                  className="cursor-pointer flex-1 flex items-center justify-center text-[10px] font-extrabold uppercase py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 rounded-xl transition-colors disabled:opacity-40 disabled:pointer-events-none"
                 >
                   {isWatched ? "Watched" : "Watched"}
                 </button>
@@ -221,7 +221,7 @@ export default function WatchlistList({ items: initialItems }: { items: Watchlis
                   </button>
                   <button
                     onClick={() => handleSaveWatched(item, null)}
-                    className="cursor-pointer flex-1 bg-white/5 border border-white/10 text-gray-300 text-[11px] font-black uppercase py-2.5 rounded-xl hover:bg-white/10 transition-colors"
+                    className="cursor-pointer flex-1 bg-white/5 text-gray-300 text-[11px] font-black uppercase py-2.5 rounded-xl hover:bg-white/10 transition-colors"
                   >
                     Skip
                   </button>

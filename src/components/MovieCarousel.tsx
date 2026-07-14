@@ -67,7 +67,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
               className="flex-none w-[180px] md:w-[220px] snap-start cursor-pointer group/card"
             >
               {/* Image Container */}
-              <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#12141c] border border-white/5 district-card">
+              <div className="relative aspect-[2/3] w-full rounded-[24px] overflow-hidden bg-[#12141c] district-card">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={posterUrl}
@@ -118,7 +118,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                     )}
                     <button
                       onClick={() => setSelectedMovie(movie)}
-                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-colors"
+                      className="p-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white transition-colors"
                     >
                       <Info size={12} />
                     </button>
@@ -148,11 +148,11 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
       {/* Movie Details Modal */}
       {selectedMovie && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
-          <div className="relative w-full max-w-2xl bg-[#12141c] border border-white/10 rounded-[32px] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
+          <div className="relative w-full max-w-2xl bg-[#12141c] rounded-[32px] overflow-hidden shadow-2xl animate-in fade-in zoom-in duration-200">
             {/* Close Button */}
             <button
               onClick={() => setSelectedMovie(null)}
-              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-gray-400 hover:text-white border border-white/5 transition-colors"
+              className="absolute top-4 right-4 z-10 p-2.5 rounded-full bg-black/60 hover:bg-black/80 text-gray-400 hover:text-white transition-colors"
             >
               <X size={18} />
             </button>
@@ -187,7 +187,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                       {isTheatrical ? "Theatrical Release" : selectedMovie.media_type === "movie" ? "Movie" : "TV Series"}
                     </span>
                     {selectedMovie.vote_average && selectedMovie.vote_average > 0 && (
-                      <span className="text-xs font-black text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full flex items-center gap-1 border border-amber-500/20">
+                      <span className="text-xs font-black text-amber-500 bg-amber-500/10 px-2.5 py-0.5 rounded-full flex items-center gap-1">
                         <Star size={11} className="fill-amber-500" />
                         {selectedMovie.vote_average.toFixed(1)} / 10
                       </span>
@@ -215,7 +215,7 @@ export default function MovieCarousel({ movies, savedIds, isTheatrical = false }
                 </div>
 
                 {/* Footer action buttons */}
-                <div className="mt-8 pt-4 border-t border-white/5 flex gap-4">
+                <div className="mt-8 pt-4 flex gap-4">
                   {isTheatrical ? (
                     <a
                       href={getBmsLink(selectedMovie.title)}

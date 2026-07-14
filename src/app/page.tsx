@@ -30,7 +30,7 @@ export default async function Home() {
       {/* Hero Banner Section */}
       <section className="relative px-4 md:px-8 pt-8">
         <div className="max-w-7xl mx-auto">
-          <div className="relative overflow-hidden rounded-[24px] border border-white/5 bg-gradient-to-br from-[#12141c] to-[#090a0f] p-8 md:p-12 shadow-xl flex flex-col items-center text-center justify-center min-h-[220px]">
+          <div className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#12141c] to-[#090a0f] p-8 md:p-12 shadow-xl flex flex-col items-center text-center justify-center min-h-[220px]">
             <div className="absolute top-0 right-0 w-[250px] h-[250px] bg-[#e23744]/5 rounded-full blur-[80px] pointer-events-none" />
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white mb-3">
@@ -69,7 +69,7 @@ export default async function Home() {
           <a href="#upcoming" className="district-pill-inactive px-5 py-2 text-xs cursor-pointer flex-none">
             Upcoming
           </a>
-          <Link href="/mood-chat" className="district-pill-inactive px-5 py-2 text-xs cursor-pointer flex-none border-dashed border-[#e23744]/40 text-white">
+          <Link href="/mood-chat" className="district-pill-inactive px-5 py-2 text-xs cursor-pointer flex-none text-white">
             ⚡ AI Vibe Chat
           </Link>
         </div>
@@ -93,7 +93,7 @@ export default async function Home() {
           {trending.length > 0 ? (
             <MovieCarousel movies={trending} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c] border border-white/5">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No trending titles found.
               </p>
@@ -117,7 +117,7 @@ export default async function Home() {
           {recent.length > 0 ? (
             <MovieCarousel movies={recent} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c] border border-white/5">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No recent releases found.
               </p>
@@ -136,7 +136,7 @@ export default async function Home() {
                 Now in Theatres
               </h2>
             </div>
-            <span className="text-[9px] text-gray-500 font-extrabold uppercase tracking-widest border border-white/5 px-2.5 py-1 rounded-full">
+            <span className="text-[9px] text-gray-500 font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-full">
               India
             </span>
           </div>
@@ -144,7 +144,7 @@ export default async function Home() {
           {nowPlaying.length > 0 ? (
             <MovieCarousel movies={nowPlaying} savedIds={savedIds} isTheatrical={true} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c] border border-white/5">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No theatrical movies found.
               </p>
@@ -168,7 +168,7 @@ export default async function Home() {
           {upcoming.length > 0 ? (
             <MovieCarousel movies={upcoming} savedIds={savedIds} />
           ) : (
-            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c] border border-white/5">
+            <div className="h-[200px] flex items-center justify-center rounded-[20px] bg-[#12141c]">
               <p className="text-gray-500 text-xs font-bold uppercase tracking-wider">
                 No upcoming releases found.
               </p>

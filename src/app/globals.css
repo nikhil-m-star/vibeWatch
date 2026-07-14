@@ -16,7 +16,7 @@
   --color-card: var(--card-bg);
   --color-card-hover: var(--card-hover-bg);
   --color-brand: var(--brand-red);
-  --font-sans: 'Outfit', 'Inter', system-ui, sans-serif;
+  --font-sans: 'Poppins', 'Inter', system-ui, sans-serif;
 }
 
 body {
@@ -42,26 +42,15 @@ body {
   background-size: 20px 20px;
 }
 
-.premium-glow-btn {
-  box-shadow: 0 4px 14px 0 rgba(226, 55, 68, 0.2);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.premium-glow-btn:hover {
-  box-shadow: 0 6px 20px 0 rgba(226, 55, 68, 0.35);
-  transform: translateY(-1px);
-}
-
-/* District UI Elements */
+/* District UI Elements — Borderless */
 .district-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .district-card {
   background: var(--card-bg);
-  border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 28px;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -69,44 +58,43 @@ body {
 
 .district-card:hover {
   transform: translateY(-6px) scale(1.008);
-  border-color: rgba(226, 55, 68, 0.3);
   box-shadow: 0 20px 40px -12px var(--accent-glow);
 }
 
 .district-badge-red {
-  background: rgba(226, 55, 68, 0.08);
+  background: rgba(226, 55, 68, 0.1);
   color: #ff4d5d;
-  border: 1px solid rgba(226, 55, 68, 0.15);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 8px;
   letter-spacing: 0.06em;
+  border-radius: 9999px;
 }
 
 .district-badge-lime {
-  background: rgba(163, 230, 53, 0.08);
+  background: rgba(163, 230, 53, 0.1);
   color: #a3e635;
-  border: 1px solid rgba(163, 230, 53, 0.15);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 8px;
   letter-spacing: 0.06em;
+  border-radius: 9999px;
 }
 
 .district-badge-cyan {
-  background: rgba(6, 182, 212, 0.08);
+  background: rgba(6, 182, 212, 0.1);
   color: #22d3ee;
-  border: 1px solid rgba(6, 182, 212, 0.15);
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 8px;
   letter-spacing: 0.06em;
+  border-radius: 9999px;
 }
 
 .district-btn-primary {
   background: var(--brand-red);
   color: #ffffff;
-  font-weight: 900;
+  font-weight: 700;
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 0.06em;
@@ -119,10 +107,9 @@ body {
 }
 
 .district-btn-secondary {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.05);
   color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  font-weight: 800;
+  font-weight: 600;
   text-transform: uppercase;
   font-size: 10px;
   letter-spacing: 0.05em;
@@ -130,43 +117,24 @@ body {
   transition: all 0.2s ease;
 }
 .district-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .district-pill-active {
   background: var(--brand-red);
   color: #ffffff;
-  font-weight: 700;
+  font-weight: 600;
   border-radius: 9999px;
-  border: 1px solid var(--brand-red);
 }
 
 .district-pill-inactive {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
   color: #9ca3af;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  font-weight: 600;
+  font-weight: 500;
   border-radius: 9999px;
   transition: all 0.2s ease;
 }
 .district-pill-inactive:hover {
-  background: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.08);
   color: #ffffff;
-}
-
-/* Floating Bottom Tab Bar Style */
-.floating-bottom-nav {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-  border-radius: 9999px;
-  padding: 8px 16px;
-  background: rgba(18, 20, 28, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.6);
 }

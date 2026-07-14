@@ -158,7 +158,7 @@ export default function MoodChatPage() {
                       setInputText(preset);
                       handleSendMessage(preset);
                     }}
-                    className="cursor-pointer text-[10px] font-semibold text-gray-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-[#e23744]/30 rounded-full px-4 py-2 transition-all duration-200"
+                    className="cursor-pointer text-[10px] font-semibold text-gray-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] rounded-full px-4 py-2 transition-all duration-200"
                   >
                     {preset}
                   </button>
@@ -173,7 +173,7 @@ export default function MoodChatPage() {
             
             <div className="relative z-10 space-y-5 max-w-sm">
               {lastUserMsg && (
-                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4">
+                <div className="bg-white/[0.03] rounded-2xl p-4">
                   <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 block mb-2">Your vibe</span>
                   <p className="text-sm text-white font-semibold leading-relaxed">{lastUserMsg}</p>
                 </div>
@@ -185,7 +185,7 @@ export default function MoodChatPage() {
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Finding your matches...</span>
                 </div>
               ) : lastAiMsg ? (
-                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4">
+                <div className="bg-white/[0.03] rounded-2xl p-4">
                   <span className="text-[8px] font-black uppercase tracking-widest text-[#ff4d5d] block mb-2">AI Response</span>
                   <p className="text-xs text-gray-300 leading-relaxed">{lastAiMsg}</p>
                 </div>
@@ -196,14 +196,14 @@ export default function MoodChatPage() {
           /* ===== RESULTS STATE: recommendation grid ===== */
           <div className="p-6 md:p-8 space-y-6 max-w-6xl mx-auto animate-in fade-in duration-500">
             {/* Results Header */}
-            <div className="flex items-center justify-between border-b border-white/5 pb-4">
+            <div className="flex items-center justify-between pb-4">
               <h1 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
                 <Sparkles size={14} className="text-[#ff4d5d]" />
                 VIBE RESULTS
               </h1>
               <button
                 onClick={startNewSession}
-                className="cursor-pointer flex items-center justify-center gap-1.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-extrabold text-[9px] uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all hover:scale-[1.02]"
+                className="cursor-pointer flex items-center justify-center gap-1.5 bg-white/5 hover:bg-white/10 text-white font-extrabold text-[9px] uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all hover:scale-[1.02]"
               >
                 <RotateCcw size={10} />
                 New Search
@@ -220,7 +220,7 @@ export default function MoodChatPage() {
                 return (
                   <div
                     key={rec.id || rec.tmdbId}
-                    className="group flex flex-col bg-[#11131a] rounded-[28px] overflow-hidden border border-white/5 hover:border-[#e23744]/35 transition-all shadow-lg hover:shadow-2xl relative duration-300 district-card"
+                    className="group flex flex-col bg-[#11131a] rounded-[28px] overflow-hidden transition-all shadow-lg hover:shadow-2xl relative duration-300 district-card"
                   >
                     {/* Media Type Tag */}
                     <span className={`absolute top-3.5 left-3.5 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
@@ -230,7 +230,7 @@ export default function MoodChatPage() {
                     </span>
 
                     {/* Poster */}
-                    <div className="relative aspect-[16/10] overflow-hidden bg-gray-900 border-b border-white/5">
+                    <div className="relative aspect-[16/10] overflow-hidden bg-gray-900">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={
@@ -252,7 +252,7 @@ export default function MoodChatPage() {
 
                     {/* Content */}
                     <div className="p-5 flex-1 flex flex-col justify-between gap-5">
-                      <p className="text-[11px] text-gray-300 leading-relaxed font-semibold italic bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
+                      <p className="text-[11px] text-gray-300 leading-relaxed font-semibold italic bg-white/[0.02] p-3.5 rounded-xl">
                         {rec.reason}
                       </p>
 
@@ -265,14 +265,14 @@ export default function MoodChatPage() {
                               src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                               alt={provider.provider_name}
                               title={provider.provider_name}
-                              className="h-5 w-5 rounded object-cover border border-white/10 bg-black/30 transition-transform hover:scale-110"
+                              className="h-5 w-5 rounded object-cover bg-black/30 transition-transform hover:scale-110"
                             />
                           ))}
                         </div>
                       )}
 
                       {/* Controls */}
-                      <div className="pt-3.5 border-t border-white/5 flex flex-col gap-2">
+                      <div className="pt-3.5 flex flex-col gap-2">
                         <div className="flex gap-2">
                           <button
                             onClick={() => handleToggleWatchlist(rec)}
@@ -288,7 +288,7 @@ export default function MoodChatPage() {
                           <button
                             onClick={() => handleWatchedClick(rec.tmdbId)}
                             disabled={isWatched}
-                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary text-[#ff4d5d] border-[#ff4d5d]/20 hover:border-[#ff4d5d]/40 disabled:opacity-40 hover:scale-[1.02] transition-transform"
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary text-[#ff4d5d] disabled:opacity-40 hover:scale-[1.02] transition-transform"
                           >
                             {isWatched ? "Watched" : "Rate"}
                           </button>
@@ -371,7 +371,7 @@ export default function MoodChatPage() {
             e.preventDefault();
             handleSendMessage();
           }}
-          className="flex items-center gap-2 bg-[#11131a]/90 backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2.5 shadow-2xl shadow-black/50"
+          className="flex items-center gap-2 bg-[#11131a]/90 backdrop-blur-2xl rounded-full px-4 py-2.5 shadow-2xl shadow-black/50"
         >
           {/* Reset button (only when there's an active session) */}
           {(messages.length > 0 || isReady) && (

@@ -27,7 +27,7 @@ export default async function ProfilePage() {
   return (
     <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1 space-y-12">
       {/* Profile Header Card */}
-      <div className="relative p-6 md:p-8 rounded-3xl bg-[#11131a] border border-white/5 overflow-hidden shadow-xl glow-card flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="relative p-6 md:p-8 rounded-3xl bg-[#11131a] overflow-hidden shadow-xl glow-card flex flex-col md:flex-row items-center justify-between gap-6">
         
         {/* Background glow decoration */}
         <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-full blur-[60px] pointer-events-none" />
@@ -45,7 +45,7 @@ export default async function ProfilePage() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-6 relative z-10 w-full md:w-auto border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-10">
+        <div className="grid grid-cols-3 gap-6 relative z-10 w-full md:w-auto pt-6 md:pt-0 md:pl-10">
           <div className="text-center md:text-left">
             <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest block mb-0.5">
               Sessions

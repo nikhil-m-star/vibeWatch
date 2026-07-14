@@ -29,23 +29,23 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
   return (
     <div className="space-y-8">
       {/* Tab Switcher */}
-      <div className="flex border-b border-white/5 gap-6 text-sm font-semibold tracking-wide">
+      <div className="flex gap-6 text-sm font-semibold tracking-wide">
         <button
           onClick={() => setActiveTab("history")}
-          className={`cursor-pointer pb-4 border-b-2 transition-all flex items-center gap-2 ${
+          className={`cursor-pointer pb-4 transition-all flex items-center gap-2 ${
             activeTab === "history"
-              ? "border-orange-500 text-white"
-              : "border-transparent text-gray-500 hover:text-gray-300"
+              ? "bg-[#e23744]/20 text-white"
+              : "bg-transparent text-gray-500 hover:text-gray-300"
           }`}
         >
           <History size={16} /> Watch History ({watchHistory.length})
         </button>
         <button
           onClick={() => setActiveTab("chat")}
-          className={`cursor-pointer pb-4 border-b-2 transition-all flex items-center gap-2 ${
+          className={`cursor-pointer pb-4 transition-all flex items-center gap-2 ${
             activeTab === "chat"
-              ? "border-orange-500 text-white"
-              : "border-transparent text-gray-500 hover:text-gray-300"
+              ? "bg-[#e23744]/20 text-white"
+              : "bg-transparent text-gray-500 hover:text-gray-300"
           }`}
         >
           <MessageSquare size={16} /> Past Vibe Chats ({pastQueries.length})
@@ -56,7 +56,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
       {activeTab === "history" && (
         <div className="space-y-4">
           {watchHistory.length === 0 ? (
-            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl border border-white/5">
+            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl">
               <History size={24} className="text-gray-600 mb-3" />
               <p className="text-xs text-gray-500">You haven't marked any titles as watched yet.</p>
             </div>
@@ -65,10 +65,10 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
               {watchHistory.map((item) => (
                 <div
                   key={`${item.mediaType}-${item.tmdbId}`}
-                  className="p-4 bg-[#11131a] rounded-2xl border border-white/5 hover:border-white/10 transition-colors flex items-center justify-between gap-4"
+                  className="p-4 bg-[#11131a] rounded-2xl transition-colors flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400 border border-orange-500/10">
+                    <div className="h-10 w-10 rounded-xl bg-orange-500/10 flex items-center justify-center text-orange-400">
                       {item.mediaType === "movie" ? <Film size={18} /> : <Tv size={18} />}
                     </div>
                     <div>
@@ -95,7 +95,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                     </span>
                     <button
                       onClick={() => handleDeleteHistory(item.tmdbId, item.mediaType)}
-                      className="cursor-pointer p-2 rounded-xl bg-white/5 hover:bg-red-500/10 border border-white/10 hover:border-red-500/20 text-gray-500 hover:text-red-400 transition-all"
+                      className="cursor-pointer p-2 rounded-xl bg-white/5 hover:bg-red-500/10 text-gray-500 hover:text-red-400 transition-all"
                       title="Remove from history"
                     >
                       <Trash2 size={13} />
@@ -111,7 +111,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
       {activeTab === "chat" && (
         <div className="space-y-6">
           {pastQueries.length === 0 ? (
-            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl border border-white/5">
+            <div className="h-[200px] flex flex-col items-center justify-center text-center p-8 bg-[#11131a] rounded-3xl">
               <MessageSquare size={24} className="text-gray-600 mb-3" />
               <p className="text-xs text-gray-500">No past vibe chat sessions recorded.</p>
             </div>
@@ -124,10 +124,10 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                 return (
                   <div
                     key={query.id}
-                    className="p-6 bg-[#11131a] rounded-3xl border border-white/5 space-y-4"
+                    className="p-6 bg-[#11131a] rounded-3xl space-y-4"
                   >
                     {/* Query Metadata Header */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 pb-4">
                       <div className="flex items-center gap-2 text-xs text-gray-400 font-semibold">
                         <Calendar size={13} />
                         {new Date(query.createdAt).toLocaleDateString("en-US", {
@@ -145,7 +145,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                           {tags.tone.slice(0, 3).map((tone: string) => (
                             <span
                               key={tone}
-                              className="text-[9px] font-black uppercase tracking-wider bg-orange-500/10 border border-orange-500/25 px-2.5 py-0.5 rounded-full text-orange-400"
+                              className="text-[9px] font-black uppercase tracking-wider bg-orange-500/10 px-2.5 py-0.5 rounded-full text-orange-400"
                             >
                               {tone}
                             </span>
@@ -155,7 +155,7 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                     </div>
 
                     {/* Opening request */}
-                    <div className="bg-black/30 p-3.5 rounded-2xl border border-white/5">
+                    <div className="bg-black/30 p-3.5 rounded-2xl">
                       <span className="text-[9px] uppercase tracking-wide font-extrabold text-gray-500 block mb-1">
                         Opening Vibe Request
                       </span>
@@ -173,10 +173,10 @@ export default function ProfileTabs({ pastQueries, watchHistory: initialHistory 
                         {query.recommendations?.map((rec: any) => (
                           <div
                             key={rec.id}
-                            className="p-3 bg-black/20 border border-white/5 rounded-2xl flex flex-col gap-1.5"
+                            className="p-3 bg-black/20 rounded-2xl flex flex-col gap-1.5"
                           >
                             <div className="flex items-center gap-2">
-                              <span className="text-[8px] font-black uppercase tracking-wide px-1.5 py-0.5 bg-white/5 border border-white/10 text-gray-400 rounded">
+                              <span className="text-[8px] font-black uppercase tracking-wide px-1.5 py-0.5 bg-white/5 text-gray-400 rounded">
                                 {rec.mediaType}
                               </span>
                               <h4 className="text-xs font-bold text-white tracking-tight line-clamp-1">
