@@ -8,8 +8,8 @@ import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Sparkles, Send, Plus, Check, Star, Play, 
-  HelpCircle, Tv, Film, Loader2, ArrowRight, X, ExternalLink 
+  Sparkles, Check, Star, 
+  Loader2, ArrowUp, X, ExternalLink, RotateCcw
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -31,22 +31,17 @@ export default function MoodChatPage() {
   const [ratingValue, setRatingValue] = useState<number>(5);
   const [watchedRecord, setWatchedRecord] = useState<Record<number, boolean>>({});
 
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  // Auto-scroll chat to bottom
-  useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isLoading]);
+  // Derive latest messages for the floating pill
+  const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content || null;
+  const lastAiMsg = [...messages].reverse().find((m) => m.role === "assistant")?.content || null;
 
   // Load watch providers and saved states when recommendations load
   useEffect(() => {
     if (recommendations.length > 0) {
       recommendations.forEach(async (rec) => {
-        // Fetch providers
         const providersList = await getProvidersAction(rec.tmdbId, rec.mediaType);
         setProviders((prev) => ({ ...prev, [rec.tmdbId]: providersList }));
         
-        // Fetch saved status
         const saved = await isTitleSaved(rec.tmdbId, rec.mediaType);
         setSavedIds((prev) => ({ ...prev, [rec.tmdbId]: saved }));
       });
@@ -59,7 +54,6 @@ export default function MoodChatPage() {
 
     if (!textToSend) setInputText("");
     
-    // Optimistic user bubble
     const userMsg: ChatMessage = { role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
@@ -75,23 +69,18 @@ export default function MoodChatPage() {
       }
     } catch (err) {
       console.error(err);
-      // fallback
       setMessages((prev) => [
         ...prev,
-        { role: "assistant", content: "Something went wrong. Let's recommend a few generic hits for you." }
+        { role: "assistant", content: "Something went wrong. Here are some picks for you." }
       ]);
       setIsReady(true);
       setRecommendations([
-        { tmdbId: 27205, title: "Inception", mediaType: "movie", posterPath: "/o0Qywl1ILK75h0uz2gfwH6D7c5C.jpg", reason: "Enjoy this mind-bending masterpiece while the AI server resets." },
-        { tmdbId: 155, title: "The Dark Knight", mediaType: "movie", posterPath: "/qJ2tWw3pmIv3gh7pb2uC0nSdqK1.jpg", reason: "An epic superhero crime thriller for high-energy nights." }
+        { tmdbId: 27205, title: "Inception", mediaType: "movie", posterPath: "/o0Qywl1ILK75h0uz2gfwH6D7c5C.jpg", reason: "A mind-bending masterpiece." },
+        { tmdbId: 155, title: "The Dark Knight", mediaType: "movie", posterPath: "/qJ2tWw3pmIv3gh7pb2uC0nSdqK1.jpg", reason: "An epic crime thriller." }
       ]);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleSkip = () => {
-    handleSendMessage("Please skip the questions and recommend something now based on my current inputs.");
   };
 
   const handleToggleWatchlist = async (rec: any) => {
@@ -109,7 +98,7 @@ export default function MoodChatPage() {
 
   const handleWatchedClick = (tmdbId: number) => {
     setActiveRatingMovieId(tmdbId);
-    setRatingValue(5); // Default to 5 stars
+    setRatingValue(5);
   };
 
   const handleSaveWatched = async (rec: any) => {
@@ -132,138 +121,81 @@ export default function MoodChatPage() {
     setWatchedRecord({});
   };
 
-  return (
-    <div className="flex-1 flex flex-col md:flex-row h-[calc(100vh-68px)] overflow-hidden">
-      {/* LEFT COLUMN: Chat Panel */}
-      <div className="w-full md:w-[350px] lg:w-[380px] flex-none border-b md:border-b-0 md:border-r border-white/5 bg-[#0b0c11] flex flex-col h-[40%] md:h-full relative z-20">
-        
-        {/* Header */}
-        <div className="p-4 border-b border-white/5 bg-[#12141c] flex items-center justify-between shadow-sm">
-          <span className="text-[10px] font-black tracking-widest text-white uppercase flex items-center gap-1.5">
-            <span className="h-2 w-2 rounded-full bg-[#e23744] animate-pulse" />
-            AI CONCIERGE
-          </span>
-          {(messages.length > 0 || isReady) && (
-            <button 
-              onClick={startNewSession}
-              className="cursor-pointer text-[9px] uppercase font-extrabold text-gray-400 hover:text-white border border-white/10 px-2.5 py-1.5 rounded-lg transition-all bg-white/5 hover:bg-white/10 hover:scale-[1.02]"
-            >
-              Reset
-            </button>
-          )}
-        </div>
+  // Preset chips for the empty state
+  const presets = [
+    "Something light & fun",
+    "Emotional drama to cry",
+    "Fast-paced thriller",
+    "Background noise for studying",
+    "Dark spiderman series",
+    "Mind-bending sci-fi"
+  ];
 
-        {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-none bg-[#090a0f] premium-dots">
-          {messages.length === 0 && (
-            <div className="h-full flex flex-col items-center justify-center text-center py-6 animate-in fade-in duration-300">
-              <h3 className="text-xs font-black text-white uppercase tracking-widest mb-4">How's your vibe?</h3>
+  return (
+    <div className="flex-1 flex flex-col h-[calc(100vh-68px)] overflow-hidden relative bg-[#07080c]">
+      {/* Full-Page Content Area */}
+      <div className="flex-1 overflow-y-auto scrollbar-none pb-32">
+        {!isReady && !isLoading && messages.length === 0 ? (
+          /* ===== EMPTY STATE: centered prompt ===== */
+          <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#e23744]/5 rounded-full blur-[100px] pointer-events-none" />
+            
+            <div className="relative z-10 space-y-6 max-w-md">
+              <div className="flex items-center justify-center gap-2">
+                <span className="h-2.5 w-2.5 rounded-full bg-[#e23744] animate-pulse" />
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">AI Concierge</span>
+              </div>
               
-              {/* Preset suggestion chips */}
-              <div className="flex flex-wrap gap-2 justify-center max-w-[280px]">
-                {[
-                  "Something light, don't want to think",
-                  "Want to cry / emotional drama",
-                  "A fast-paced crime thriller",
-                  "Background noise while studying"
-                ].map((preset) => (
+              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                What's your <span className="text-[#ff4d5d]">vibe</span> today?
+              </h1>
+
+              <div className="flex flex-wrap gap-2 justify-center">
+                {presets.map((preset) => (
                   <button
                     key={preset}
                     onClick={() => {
                       setInputText(preset);
                       handleSendMessage(preset);
                     }}
-                    className="cursor-pointer text-[9px] font-bold text-gray-400 hover:text-white hover:border-[#e23744]/55 bg-[#12141c]/65 border border-white/5 rounded-full px-3.5 py-2 transition-all hover:scale-[1.02] hover:bg-[#151722]"
+                    className="cursor-pointer text-[10px] font-semibold text-gray-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.06] hover:border-[#e23744]/30 rounded-full px-4 py-2 transition-all duration-200"
                   >
                     {preset}
                   </button>
                 ))}
               </div>
             </div>
-          )}
+          </div>
+        ) : !isReady ? (
+          /* ===== PROCESSING STATE: show user query + AI thinking ===== */
+          <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#e23744]/5 rounded-full blur-[90px] pointer-events-none" />
+            
+            <div className="relative z-10 space-y-5 max-w-sm">
+              {lastUserMsg && (
+                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 block mb-2">Your vibe</span>
+                  <p className="text-sm text-white font-semibold leading-relaxed">{lastUserMsg}</p>
+                </div>
+              )}
 
-          {messages.map((msg, i) => (
-            <div
-              key={i}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"} animate-in fade-in duration-300`}
-            >
-              <div
-                className={`max-w-[85%] rounded-[20px] p-3.5 text-xs leading-relaxed ${
-                  msg.role === "user"
-                    ? "bg-gradient-to-br from-[#e23744] to-[#b81d2a] text-white rounded-br-none font-semibold shadow-lg shadow-[#e23744]/15 border border-[#e23744]/25"
-                    : "bg-[#11131a]/85 backdrop-blur-md text-gray-200 border border-white/10 rounded-bl-none shadow-md"
-                }`}
-              >
-                {msg.content}
-              </div>
-            </div>
-          ))}
-
-          {isLoading && (
-            <div className="flex justify-start">
-              <div className="bg-[#11131a]/85 backdrop-blur-md text-gray-400 border border-white/10 rounded-[20px] rounded-bl-none p-3.5 flex items-center gap-2.5">
-                <Loader2 size={12} className="animate-spin text-[#ff4d5d]" />
-                <span className="text-[9px] font-black uppercase tracking-wider text-gray-500">Thinking...</span>
-              </div>
-            </div>
-          )}
-
-          <div ref={chatEndRef} />
-        </div>
-
-        {/* Input Panel */}
-        <div className="p-4 border-t border-white/5 bg-[#12141c]/95 backdrop-blur-md space-y-2">
-          {messages.length > 0 && !isReady && (
-            <div className="flex justify-end">
-              <button
-                onClick={handleSkip}
-                className="cursor-pointer text-[9px] font-black text-[#ff4d5d] hover:text-[#ff334b] uppercase tracking-wider flex items-center gap-1 transition-colors"
-              >
-                Skip to Recommendations <ArrowRight size={10} />
-              </button>
-            </div>
-          )}
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleSendMessage();
-            }}
-            className="flex gap-2"
-          >
-            <input
-              type="text"
-              disabled={isReady || isLoading}
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              placeholder={isReady ? "Results ready" : "Describe your vibe..."}
-              className="flex-1 min-w-0 bg-black/50 border border-white/10 rounded-xl px-4 py-3 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#e23744]/60 focus:ring-1 focus:ring-[#e23744]/40 focus:bg-black/75 transition-all shadow-inner"
-            />
-            <button
-              type="submit"
-              disabled={!inputText.trim() || isReady || isLoading}
-              className="cursor-pointer h-10 w-10 flex items-center justify-center rounded-xl bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white disabled:opacity-30 disabled:pointer-events-none hover:opacity-95 transition-all shadow-lg shadow-[#e23744]/15 hover:scale-[1.02]"
-            >
-              <Send size={12} />
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* RIGHT COLUMN: The Recommendations Board */}
-      <div className="flex-1 overflow-y-auto bg-[#07080c] bg-[radial-gradient(circle_at_center,rgba(226,55,68,0.035),transparent)] h-[60%] md:h-full scrollbar-none pb-24">
-        {!isReady ? (
-          <div className="h-full flex flex-col items-center justify-center text-center p-8 relative">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#e23744]/5 rounded-full blur-[90px]" />
-            <div className="relative z-10">
-              <p className="text-[10px] text-gray-600 font-black uppercase tracking-widest">
-                Recommendations will appear here
-              </p>
+              {isLoading ? (
+                <div className="flex items-center justify-center gap-2.5 py-3">
+                  <Loader2 size={14} className="animate-spin text-[#ff4d5d]" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Finding your matches...</span>
+                </div>
+              ) : lastAiMsg ? (
+                <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-4">
+                  <span className="text-[8px] font-black uppercase tracking-widest text-[#ff4d5d] block mb-2">AI Response</span>
+                  <p className="text-xs text-gray-300 leading-relaxed">{lastAiMsg}</p>
+                </div>
+              ) : null}
             </div>
           </div>
         ) : (
+          /* ===== RESULTS STATE: recommendation grid ===== */
           <div className="p-6 md:p-8 space-y-6 max-w-6xl mx-auto animate-in fade-in duration-500">
-            {/* Recommendation Header */}
+            {/* Results Header */}
             <div className="flex items-center justify-between border-b border-white/5 pb-4">
               <h1 className="text-sm font-black uppercase tracking-widest text-white flex items-center gap-2">
                 <Sparkles size={14} className="text-[#ff4d5d]" />
@@ -273,11 +205,12 @@ export default function MoodChatPage() {
                 onClick={startNewSession}
                 className="cursor-pointer flex items-center justify-center gap-1.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-extrabold text-[9px] uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all hover:scale-[1.02]"
               >
-                Reset Chat
+                <RotateCcw size={10} />
+                New Search
               </button>
             </div>
 
-            {/* Recommendations Grid */}
+            {/* Cards Grid */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {recommendations.map((rec) => {
                 const isSaved = !!savedIds[rec.tmdbId];
@@ -289,14 +222,14 @@ export default function MoodChatPage() {
                     key={rec.id || rec.tmdbId}
                     className="group flex flex-col bg-[#11131a] rounded-[28px] overflow-hidden border border-white/5 hover:border-[#e23744]/35 transition-all shadow-lg hover:shadow-2xl relative duration-300 district-card"
                   >
-                    {/* Media Type Tag overlay */}
+                    {/* Media Type Tag */}
                     <span className={`absolute top-3.5 left-3.5 z-10 text-[8px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full ${
                       rec.mediaType === "movie" ? "district-badge-red" : "district-badge-cyan"
                     }`}>
                       {rec.mediaType === "movie" ? "Movie" : "TV Show"}
                     </span>
 
-                    {/* Poster + Title Overlay */}
+                    {/* Poster */}
                     <div className="relative aspect-[16/10] overflow-hidden bg-gray-900 border-b border-white/5">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
@@ -311,20 +244,18 @@ export default function MoodChatPage() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-transparent" />
                       
                       <div className="absolute bottom-3.5 left-3.5 right-3.5">
-                        <h3 className="text-sm font-black text-white tracking-tight leading-snug uppercase tracking-wide">
+                        <h3 className="text-sm font-black text-white leading-snug uppercase">
                           {rec.title}
                         </h3>
                       </div>
                     </div>
 
-                    {/* Content Section */}
+                    {/* Content */}
                     <div className="p-5 flex-1 flex flex-col justify-between gap-5">
-                      {/* Reason */}
                       <p className="text-[11px] text-gray-300 leading-relaxed font-semibold italic bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
                         {rec.reason}
                       </p>
 
-                      {/* Streaming availability */}
                       {recProviders.length > 0 && (
                         <div className="flex flex-wrap gap-2 items-center">
                           <span className="text-[8px] text-gray-500 font-extrabold uppercase mr-1">Streaming:</span>
@@ -340,7 +271,7 @@ export default function MoodChatPage() {
                         </div>
                       )}
 
-                      {/* Interactive Controls */}
+                      {/* Controls */}
                       <div className="pt-3.5 border-t border-white/5 flex flex-col gap-2">
                         <div className="flex gap-2">
                           <button
@@ -348,13 +279,9 @@ export default function MoodChatPage() {
                             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary hover:scale-[1.02] transition-transform"
                           >
                             {isSaved ? (
-                              <>
-                                Saved <Check size={10} className="text-emerald-400" />
-                              </>
+                              <>Saved <Check size={10} className="text-emerald-400" /></>
                             ) : (
-                              <>
-                                Save
-                              </>
+                              <>Save</>
                             )}
                           </button>
 
@@ -429,13 +356,52 @@ export default function MoodChatPage() {
                         </div>
                       </div>
                     )}
-
                   </div>
                 );
               })}
             </div>
           </div>
         )}
+      </div>
+
+      {/* ===== FLOATING BOTTOM PILL ===== */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-xl">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSendMessage();
+          }}
+          className="flex items-center gap-2 bg-[#11131a]/90 backdrop-blur-2xl border border-white/10 rounded-full px-4 py-2.5 shadow-2xl shadow-black/50"
+        >
+          {/* Reset button (only when there's an active session) */}
+          {(messages.length > 0 || isReady) && (
+            <button
+              type="button"
+              onClick={startNewSession}
+              className="cursor-pointer h-8 w-8 flex-none flex items-center justify-center rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+              title="New chat"
+            >
+              <RotateCcw size={13} />
+            </button>
+          )}
+
+          <input
+            type="text"
+            disabled={isLoading}
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder={isReady ? "Ask for something else..." : "Describe your vibe..."}
+            className="flex-1 min-w-0 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none disabled:opacity-50 py-1"
+          />
+
+          <button
+            type="submit"
+            disabled={!inputText.trim() || isLoading}
+            className="cursor-pointer h-8 w-8 flex-none flex items-center justify-center rounded-full bg-gradient-to-r from-[#e23744] to-[#ff4d5d] text-white disabled:opacity-25 disabled:pointer-events-none transition-all shadow-lg shadow-[#e23744]/20 hover:scale-105"
+          >
+            <ArrowUp size={14} strokeWidth={2.5} />
+          </button>
+        </form>
       </div>
     </div>
   );
