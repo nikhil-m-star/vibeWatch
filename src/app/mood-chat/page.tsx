@@ -192,19 +192,22 @@ export default function MoodChatPage() {
               </h1>
 
               <div className="flex flex-wrap gap-3 justify-center max-w-2xl mx-auto">
-                {presets.map((preset) => (
-                  <button
-                    key={preset.text}
-                    onClick={() => {
-                      setInputText(preset.text);
-                      handleSendMessage(preset.text);
-                    }}
-                    className={`cursor-pointer flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0d0d0d] text-gray-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.05] shadow-lg shadow-black/40 ${preset.hoverBg} ${preset.rotateClass}`}
-                  >
-                    <preset.icon size={14} className="text-[#a855f7] group-hover:text-inherit flex-shrink-0" />
-                    <span>{preset.text}</span>
-                  </button>
-                ))}
+                {presets.map((preset) => {
+                  const Icon = preset.icon;
+                  return (
+                    <button
+                      key={preset.text}
+                      onClick={() => {
+                        setInputText(preset.text);
+                        handleSendMessage(preset.text);
+                      }}
+                      className={`cursor-pointer flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0d0d0d] text-gray-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.05] shadow-lg shadow-black/40 ${preset.hoverBg} ${preset.rotateClass}`}
+                    >
+                      <Icon size={14} className="text-[#a855f7] group-hover:text-inherit flex-shrink-0" />
+                      <span>{preset.text}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
