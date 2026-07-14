@@ -226,33 +226,26 @@ export default function MoodChatPage() {
 
               {isLoading ? (
                 <div className="flex flex-col items-center py-8">
-                  {/* Playful Cinema Vibe Mixer Sonar core */}
-                  <div className="relative h-44 w-44 flex items-center justify-center mx-auto mb-10">
-                    {/* Pulsing colored glow rings */}
-                    <div className="absolute inset-0 bg-[#a855f7]/10 rounded-full animate-ping duration-[2000ms]" />
-                    <div className="absolute inset-4 bg-indigo-500/5 rounded-full animate-pulse" />
-                    <div className="absolute inset-10 bg-black rounded-full flex items-center justify-center shadow-xl shadow-[#a855f7]/25 relative z-20">
-                      <Loader2 size={32} className="animate-spin text-[#a855f7]" />
+                  {/* Playful Cinema Popcorn Machine animation */}
+                  <div className="relative h-44 w-44 flex items-center justify-center mx-auto mb-8">
+                    {/* Sonar ambient waves */}
+                    <div className="absolute inset-0 bg-[#a855f7]/5 rounded-full animate-ping duration-[2400ms]" />
+                    <div className="absolute inset-4 bg-white/[0.02] rounded-full animate-pulse" />
+                    
+                    {/* Centered wiggling popcorn bucket */}
+                    <div className="absolute inset-12 bg-[#0d0d0d] rounded-full flex items-center justify-center shadow-xl shadow-[#a855f7]/10 relative z-20 animate-wiggle-bucket">
+                      <Clapperboard size={32} className="text-[#a855f7]" />
                     </div>
                     
-                    {/* Playful Elastic Pop-out Cinema Icons */}
-                    <div className="absolute animate-pop-1 z-10 bg-amber-500/10 p-2.5 rounded-full text-amber-400 shadow-md shadow-amber-500/5">
-                      <Clapperboard size={18} />
-                    </div>
-                    <div className="absolute animate-pop-2 z-10 bg-rose-500/10 p-2.5 rounded-full text-rose-400 shadow-md shadow-rose-500/5">
-                      <Ticket size={18} />
-                    </div>
-                    <div className="absolute animate-pop-3 z-10 bg-[#a855f7]/10 p-2.5 rounded-full text-[#c084fc] shadow-md shadow-[#a855f7]/5">
-                      <Film size={18} />
-                    </div>
-                    <div className="absolute animate-pop-4 z-10 bg-teal-500/10 p-2.5 rounded-full text-teal-400 shadow-md shadow-teal-500/5">
-                      <Tv size={18} />
-                    </div>
-                    <div className="absolute animate-pop-5 z-10 bg-orange-500/10 p-2.5 rounded-full text-orange-400 shadow-md shadow-orange-500/5">
-                      <Flame size={18} />
-                    </div>
+                    {/* Playful flying popcorn kernels popping out */}
+                    <div className="absolute w-3 h-3 bg-amber-100 border border-amber-300 rounded-full animate-kernel-1 z-10" />
+                    <div className="absolute w-3.5 h-3.5 bg-yellow-100 border border-yellow-300 rounded-full animate-kernel-2 z-10" />
+                    <div className="absolute w-2.5 h-2.5 bg-amber-50 border border-amber-200 rounded-full animate-kernel-3 z-10" />
+                    <div className="absolute w-3 h-3 bg-yellow-50 border border-yellow-200 rounded-full animate-kernel-4 z-10" />
+                    <div className="absolute w-4 h-4 bg-amber-100 border border-amber-300 rounded-full animate-kernel-5 z-10" />
+                    <div className="absolute w-3.5 h-3.5 bg-yellow-100 border border-yellow-300 rounded-full animate-kernel-6 z-10" />
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Blending your cinema vibe...</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Popping your recommendations...</span>
                 </div>
               ) : lastAiMsg ? (
                 <div className="bg-white/[0.03] rounded-2xl p-5 text-left">
