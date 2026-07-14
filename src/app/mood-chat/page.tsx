@@ -8,7 +8,7 @@ import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw, Eye
+  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw, Eye, Laugh, BookOpen, Shield, Film
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -167,14 +167,14 @@ export default function MoodChatPage() {
     localStorage.removeItem("vibe_watch_chat_session");
   };
 
-  // Preset chips for the empty state
+  // Preset chips for the empty state with icons
   const presets = [
-    "Something light and fun",
-    "Emotional drama to watch",
-    "Fast-paced thriller",
-    "Background noise for studying",
-    "Dark superhero series",
-    "Mind-bending sci-fi"
+    { text: "Something light and fun", icon: Laugh },
+    { text: "Emotional drama to watch", icon: Film },
+    { text: "Fast-paced thriller", icon: Compass }, // Using Compass representing direction/thrills
+    { text: "Background noise for studying", icon: BookOpen },
+    { text: "Dark superhero series", icon: Shield },
+    { text: "Mind-bending sci-fi", icon: Compass }
   ];
 
   return (
@@ -186,27 +186,23 @@ export default function MoodChatPage() {
           <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#a855f7]/5 rounded-full blur-[100px] pointer-events-none" />
             
-            <div className="relative z-10 space-y-6 max-w-md">
-              <div className="flex items-center justify-center gap-2">
-                <span className="h-2.5 w-2.5 rounded-full bg-[#a855f7] animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">AI Concierge</span>
-              </div>
-              
-              <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <div className="relative z-10 space-y-8 max-w-xl">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight">
                 What is your <span className="text-[#a855f7]">vibe</span> today?
               </h1>
 
-              <div className="flex flex-wrap gap-2 justify-center">
+              <div className="grid sm:grid-cols-2 gap-3 max-w-lg mx-auto">
                 {presets.map((preset) => (
                   <button
-                    key={preset}
+                    key={preset.text}
                     onClick={() => {
-                      setInputText(preset);
-                      handleSendMessage(preset);
+                      setInputText(preset.text);
+                      handleSendMessage(preset.text);
                     }}
-                    className="cursor-pointer text-[10px] font-semibold text-gray-400 hover:text-white bg-white/[0.03] hover:bg-white/[0.07] rounded-full px-4 py-2 transition-all duration-200"
+                    className="cursor-pointer flex items-center gap-3 px-5 py-4 rounded-2xl bg-[#0d0d0d] hover:bg-[#a855f7]/10 text-gray-300 hover:text-[#c084fc] font-bold text-xs uppercase tracking-wider transition-all duration-300 shadow-lg shadow-black/40 text-left"
                   >
-                    {preset}
+                    <preset.icon size={16} className="text-[#a855f7] flex-shrink-0" />
+                    <span>{preset.text}</span>
                   </button>
                 ))}
               </div>
@@ -219,21 +215,21 @@ export default function MoodChatPage() {
             
             <div className="relative z-10 space-y-5 max-w-sm">
               {lastUserMsg && (
-                <div className="bg-white/[0.03] rounded-2xl p-4">
+                <div className="bg-white/[0.03] rounded-2xl p-5 text-left">
                   <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 block mb-2">Your vibe</span>
-                  <p className="text-sm text-white font-semibold leading-relaxed">{lastUserMsg}</p>
+                  <p className="text-base sm:text-lg text-white font-black leading-relaxed">{lastUserMsg}</p>
                 </div>
               )}
 
               {isLoading ? (
-                <div className="flex items-center justify-center gap-2.5 py-3">
-                  <Loader2 size={14} className="animate-spin text-[#a855f7]" />
+                <div className="flex items-center justify-center gap-2.5 py-4">
+                  <Loader2 size={16} className="animate-spin text-[#a855f7]" />
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Finding your matches...</span>
                 </div>
               ) : lastAiMsg ? (
-                <div className="bg-white/[0.03] rounded-2xl p-4">
+                <div className="bg-white/[0.03] rounded-2xl p-5 text-left">
                   <span className="text-[8px] font-black uppercase tracking-widest text-[#a855f7] block mb-2">AI Response</span>
-                  <p className="text-xs text-gray-300 leading-relaxed">{lastAiMsg}</p>
+                  <p className="text-sm text-gray-200 leading-relaxed font-semibold">{lastAiMsg}</p>
                 </div>
               ) : null}
 
@@ -348,7 +344,7 @@ export default function MoodChatPage() {
                         {rec.title}
                       </h3>
                       
-                      <p className="text-[11px] text-gray-300 leading-relaxed font-semibold bg-[#0d0d0d] p-3.5 rounded-xl">
+                      <p className="text-xs md:text-sm text-gray-300 leading-relaxed font-semibold bg-[#0d0d0d] p-4 rounded-2xl">
                         {rec.reason}
                       </p>
 

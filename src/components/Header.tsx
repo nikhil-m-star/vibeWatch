@@ -35,7 +35,7 @@ export default function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full text-[11px] font-semibold uppercase tracking-wider transition-all duration-300 ${
+              className={`flex items-center gap-2 px-5 sm:px-6 py-3 rounded-full text-[11px] font-black uppercase tracking-wider transition-all duration-300 ${
                 isActive
                   ? "bg-[#a855f7] text-white shadow-lg shadow-[#a855f7]/25"
                   : "text-gray-400 hover:text-white hover:bg-white/5"
