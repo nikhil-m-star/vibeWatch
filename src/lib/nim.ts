@@ -181,26 +181,33 @@ Include a specific, short, personalized explanation (1-2 sentences) for why each
 Do NOT invent titles. Only suggest real, searchable movies or TV shows.
 
 ALGORITHM REQUIREMENTS:
-1. QUALITY DISCOVERY FORMULA:
-   Recommend exactly 6 titles with this strict distribution to offer a premium, curated, discovery-app experience:
-   - 2 "Critical Darlings / Cult Classics": highly acclaimed masterpieces (e.g., Succession, Chernobyl, Whiplash, Severance, Mindhunter, Fleabag).
-   - 2 "Mainstream Hits": popular crowd-pleasers that fit the genre requirements perfectly.
-   - 2 "Hidden Gems / Underrated Discoveries": less-mainstream, critically beloved, or niche titles (e.g., Coherence, Dark, Scavengers Reign, The Leftovers, Mr. Robot, Patriot).
+1. EXPLICIT FRANCHISE / TOPIC OVERRIDE:
+   - If the user explicitly asks for a specific franchise (e.g., "Spider-Man", "Batman", "Star Wars", "Marvel", "Harry Potter") or a very specific topic, you MUST focus all 6 recommendations entirely on that franchise or topic.
+   - Do NOT mix in unrelated general movies or shows in this case. Keep the focus 100% on their explicit request.
 
-2. WATCH HISTORY INTEGRATION:
+2. QUALITY DISCOVERY FORMULA (General Queries):
+   - For general mood queries (when no specific franchise/topic is requested), recommend exactly 6 titles with this strict distribution:
+     * 2 "Critical Darlings / Cult Classics": highly acclaimed masterpieces (e.g., Succession, Chernobyl, Whiplash, Severance, Mindhunter, Fleabag).
+     * 2 "Mainstream Hits": popular crowd-pleasers.
+     * 2 "Hidden Gems / Underrated Discoveries": less-mainstream, critically beloved, or niche titles (e.g., Coherence, Dark, Scavengers Reign, The Leftovers, Mr. Robot, Patriot).
+
+3. WATCH HISTORY INTEGRATION:
    - Carefully review the user's Watch History: ${JSON.stringify(watchHistory)}
    - DO NOT recommend ANY title that is listed in their Watch History under any circumstances (they have already watched it).
    - If a title in their history has a high rating (>= 8), suggest similar thematic/tonal titles. If a title has a low rating (<= 5), avoid similar titles.
 
-3. DYNAMIC IN-THEATRES & UPCOMING SELECTIONS:
+4. REPEATED RECOMMENDATIONS PERMITTED:
+   - It is completely fine to recommend titles that you have suggested in previous turns of this conversation, or titles recommended in past queries, if they are still highly relevant to the user's latest message.
+
+5. DYNAMIC IN-THEATRES & UPCOMING SELECTIONS:
    - You can recommend movies currently in theatres or upcoming releases when they match the requested vibe. Here is the active list:
 ${releasesList || "No active list available."}
    - If you suggest a title from this list, you MUST mention it clearly in the reason (e.g. "Catch it now in theatres!" or "Keep an eye out for this upcoming release!").
 
-4. IMPORTANT CULTURAL GUIDELINE:
-   - If a user asks for a dark, gritty, or serious "Spider-Man" series or show, you MUST prioritize recommending the upcoming series "Spider-Noir" (TV show) or "Spider-Man: The New Animated Series" (TV show).
+6. IMPORTANT CULTURAL GUIDELINE:
+   - If a user asks for a dark, gritty, or serious "Spider-Man" series or show, you MUST prioritize recommending the upcoming series "Spider-Noir" (TV show) or "Spider-Man: The New Animated Series" (TV show) or "Spider-Man Noir" (TV show).
 
-5. HYPER-PERSONALIZED REASONING:
+7. HYPER-PERSONALIZED REASONING:
    - The "reason" MUST connect the title back to the user's specific requested tone and pacing.
    - Do NOT just summarize the plot. Explicitly mention how the pacing (slow-burn, fast-paced) and tone match their vibe.
      (e.g., "Since you wanted a slow-burn cerebral thriller, this show's somber tone and meticulous pacing will keep you hooked.")
