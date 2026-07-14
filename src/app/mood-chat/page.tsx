@@ -44,6 +44,35 @@ export default function MoodChatPage() {
     }
   }, [recommendations]);
 
+  // Load chat session state from localStorage on client-side mount
+  useEffect(() => {
+    const savedSession = localStorage.getItem("vibe_watch_chat_session");
+    if (savedSession) {
+      try {
+        const parsed = JSON.parse(savedSession);
+        if (parsed.queryId) setQueryId(parsed.queryId);
+        if (parsed.messages) setMessages(parsed.messages);
+        if (parsed.isReady !== undefined) setIsReady(parsed.isReady);
+        if (parsed.recommendations) setRecommendations(parsed.recommendations);
+      } catch (err) {
+        console.error("Failed to restore chat session:", err);
+      }
+    }
+  }, []);
+
+  // Save chat session state to localStorage when values change
+  useEffect(() => {
+    if (messages.length > 0 || isReady) {
+      const sessionData = {
+        queryId,
+        messages,
+        isReady,
+        recommendations,
+      };
+      localStorage.setItem("vibe_watch_chat_session", JSON.stringify(sessionData));
+    }
+  }, [queryId, messages, isReady, recommendations]);
+
   const handleSendMessage = async (textToSend?: string) => {
     const text = textToSend || inputText;
     if (!text.trim() || isLoading) return;
@@ -101,6 +130,7 @@ export default function MoodChatPage() {
     setProviders({});
     setSavedIds({});
     setErrorMessage(null);
+    localStorage.removeItem("vibe_watch_chat_session");
   };
 
   // Preset chips for the empty state
