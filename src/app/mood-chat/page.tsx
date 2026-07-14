@@ -12,6 +12,17 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
+const loadingPosters = [
+  "https://image.tmdb.org/t/p/w300/gEU2QvIPwc3hzvbxY22j9vj6xhR.jpg", // Interstellar
+  "https://image.tmdb.org/t/p/w300/qJ2tWUBRxtImjPn8v2oDejP82m7.jpg", // The Dark Knight
+  "https://image.tmdb.org/t/p/w300/o045BRj5QZg75n433hK3uU7n07R.jpg", // Inception
+  "https://image.tmdb.org/t/p/w300/49WJfeN0mhmmRLxs7w74T0Pr6m4.jpg", // Stranger Things
+  "https://image.tmdb.org/t/p/w300/ztkUQv6v14SNv6B15972NgnG9e0.jpg", // Breaking Bad
+  "https://image.tmdb.org/t/p/w300/9PF5cSBw24uw4Jn5fkZq562tGsr.jpg", // Wednesday
+  "https://image.tmdb.org/t/p/w300/ii8Q0mZtW3ld9JFkn63fXc51ADd.jpg", // Spider-Verse
+  "https://image.tmdb.org/t/p/w300/t6oz0VzQjNIPFUw4sqU6OKEDthY.jpg"  // Avatar
+];
+
 export default function MoodChatPage() {
   const router = useRouter();
   const [queryId, setQueryId] = useState<string | null>(null);
@@ -28,6 +39,18 @@ export default function MoodChatPage() {
   
   // Error handling
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loadingActiveIndex, setLoadingActiveIndex] = useState(0);
+
+  // Rotate loading posters ribbon while AI query is executing
+  useEffect(() => {
+    let interval: any;
+    if (isLoading) {
+      interval = setInterval(() => {
+        setLoadingActiveIndex((prev) => (prev + 1) % loadingPosters.length);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [isLoading]);
 
   // Derive latest messages for the floating pill
   const lastUserMsg = [...messages].reverse().find((m) => m.role === "user")?.content || null;
@@ -216,43 +239,72 @@ export default function MoodChatPage() {
           <div className="h-full flex flex-col items-center justify-center text-center p-6 relative">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-[#a855f7]/5 rounded-full blur-[90px] pointer-events-none" />
             
-            <div className="relative z-10 space-y-5 max-w-sm">
+            <div className={`relative z-10 space-y-6 transition-all duration-500 w-full ${isLoading ? "max-w-2xl" : "max-w-md"}`}>
               {lastUserMsg && (
-                <div className="bg-white/[0.03] rounded-2xl p-5 text-left">
+                <div className="bg-white/[0.03] rounded-2xl p-5 text-left mx-auto max-w-md">
                   <span className="text-[8px] font-black uppercase tracking-widest text-gray-500 block mb-2">Your vibe</span>
                   <p className="text-base sm:text-lg text-white font-black leading-relaxed">{lastUserMsg}</p>
                 </div>
               )}
 
               {isLoading ? (
-                <div className="flex flex-col items-center py-10">
-                  {/* Sleek Futuristic Quantum Vibe Orbit Scanner */}
-                  <div className="relative h-48 w-48 flex items-center justify-center mx-auto mb-10">
-                    {/* Ring tracks */}
-                    <div className="absolute w-24 h-24 border border-white/5 rounded-full" />
-                    <div className="absolute w-36 h-36 border border-white/5 rounded-full" />
-                    <div className="absolute w-44 h-44 border border-white/5 rounded-full" />
-
-                    {/* Orbiting nodes */}
-                    <div className="absolute animate-orbit-1 w-full h-full flex items-center justify-center">
-                      <div className="w-2.5 h-2.5 bg-[#a855f7] rounded-full shadow-lg shadow-[#a855f7]/80" />
-                    </div>
-                    <div className="absolute animate-orbit-2 w-full h-full flex items-center justify-center">
-                      <div className="w-2 h-2 bg-indigo-400 rounded-full shadow-lg shadow-indigo-400/80" />
-                    </div>
-                    <div className="absolute animate-orbit-3 w-full h-full flex items-center justify-center">
-                      <div className="w-1.5 h-1.5 bg-purple-300 rounded-full shadow-lg shadow-purple-300/80" />
-                    </div>
-
-                    {/* Central pulsing glow core */}
-                    <div className="absolute w-12 h-12 bg-[#a855f7] rounded-full animate-glow-core flex items-center justify-center relative z-20 shadow-2xl">
-                      <Loader2 size={16} className="animate-spin text-white" />
-                    </div>
+                <div className="flex flex-col items-center py-6 w-full">
+                  {/* Cinematic Bouncy Carousel ribbon */}
+                  <div className="w-full overflow-hidden py-6 flex items-center justify-center gap-3 md:gap-4 mx-auto mb-6">
+                    {(() => {
+                      const offsets = [-2, -1, 0, 1, 2];
+                      return offsets.map((offset) => {
+                        const idx = (loadingActiveIndex + offset + loadingPosters.length) % loadingPosters.length;
+                        const poster = loadingPosters[idx];
+                        
+                        // Dynamic properties based on center distance
+                        let scaleClass = "";
+                        let rotateClass = "";
+                        let opacityClass = "";
+                        let sizeClass = "";
+                        let borderClass = "";
+                        
+                        if (offset === 0) {
+                          scaleClass = "scale-110 z-10 shadow-2xl shadow-[#a855f7]/30";
+                          rotateClass = "rotate-0";
+                          opacityClass = "opacity-100";
+                          sizeClass = "w-24 h-36 md:w-28 md:h-40";
+                          borderClass = "border-2 border-[#a855f7]/30";
+                        } else if (Math.abs(offset) === 1) {
+                          scaleClass = "scale-95";
+                          rotateClass = offset === -1 ? "-rotate-6" : "rotate-6";
+                          opacityClass = "opacity-60";
+                          sizeClass = "w-20 h-30 md:w-24 md:h-34";
+                        } else {
+                          scaleClass = "scale-80";
+                          rotateClass = offset === -2 ? "-rotate-12" : "rotate-12";
+                          opacityClass = "opacity-20";
+                          sizeClass = "w-16 h-24 md:w-20 md:h-28";
+                        }
+                        
+                        return (
+                          <div
+                            key={`${idx}-${offset}`}
+                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-700 ease-in-out transform flex-none ${scaleClass} ${rotateClass} ${opacityClass} ${sizeClass} ${borderClass}`}
+                          >
+                            <img
+                              src={poster}
+                              alt="Vibe match loading"
+                              className="w-full h-full object-cover pointer-events-none select-none"
+                            />
+                          </div>
+                        );
+                      });
+                    })()}
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Calculating your cinema vibe...</span>
+
+                  <div className="flex items-center gap-2">
+                    <Loader2 size={12} className="animate-spin text-[#a855f7]" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Calculating your cinema vibe...</span>
+                  </div>
                 </div>
               ) : lastAiMsg ? (
-                <div className="bg-white/[0.03] rounded-2xl p-5 text-left">
+                <div className="bg-white/[0.03] rounded-2xl p-5 text-left mx-auto max-w-md">
                   <span className="text-[8px] font-black uppercase tracking-widest text-[#a855f7] block mb-2">AI Response</span>
                   <p className="text-sm text-gray-200 leading-relaxed font-semibold">{lastAiMsg}</p>
                 </div>
