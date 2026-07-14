@@ -285,15 +285,15 @@ export default function MoodChatPage() {
                           zIndex = 30;
                         } else if (Math.abs(diff) === 1) {
                           scale = 0.90;
-                          opacity = 0.45;
+                          opacity = 0.75;
                           zIndex = 20;
                         } else if (Math.abs(diff) === 2) {
                           scale = 0.65;
-                          opacity = 0.15;
+                          opacity = 0.45;
                           zIndex = 10;
                         } else {
                           scale = 0.45;
-                          opacity = 0.05;
+                          opacity = 0.20;
                           zIndex = 0;
                         }
                       }
