@@ -183,3 +183,40 @@ Your response MUST be a JSON object containing an array called "recommendations"
     return [];
   }
 }
+
+export async function generateSingleReplacement(
+  conversation: ChatMessage[],
+  tags: { genres: string[]; tone: string[]; pacing: string },
+  watchHistory: { title: string; mediaType: string; rating: number | null }[],
+  excludeTitles: string[],
+  currentReleases: { title: string; mediaType: "movie" | "tv"; releaseDate?: string; type: "now_playing" | "upcoming" }[] = []
+): Promise<AIRecommendation | null> {
+  const systemPrompt = `You are Vibe Watch's expert cinema recommender. The user marked a previous suggestion as watched.
+Provide exactly ONE new, real, highly relevant movie or TV show suggestion that fits their mood.
+Only suggest a real, searchable movie or TV show.
+
+EXCLUSION LIST:
+- Do NOT suggest any of these titles (already shown or watched): ${excludeTitles.join(", ")}
+- Watch History: ${JSON.stringify(watchHistory)}
+
+Your response MUST be a JSON object containing a single recommendation:
+{
+  "title": "Title Name",
+  "mediaType": "movie" | "tv",
+  "reason": "Why this fits their mood..."
+}
+`;
+
+  const responseText = await callNIM([
+    { role: "system", content: systemPrompt },
+    ...conversation,
+  ], true);
+
+  try {
+    const parsed = JSON.parse(responseText.trim());
+    return parsed;
+  } catch (error) {
+    console.error("Failed to parse single replacement JSON:", responseText, error);
+    return null;
+  }
+}

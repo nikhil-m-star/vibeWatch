@@ -2,7 +2,7 @@
 
 import { getOrCreateUser } from "@/lib/user";
 import { db } from "@/lib/db";
-import { interpretMoodAndQuestion, generateRecommendations, ChatMessage } from "@/lib/nim";
+import { interpretMoodAndQuestion, generateRecommendations, generateSingleReplacement, ChatMessage } from "@/lib/nim";
 import { searchTitle, fetchNowPlaying, fetchUpcoming } from "@/lib/tmdb";
 import { revalidatePath } from "next/cache";
 import { checkRateLimit } from "@/lib/rateLimit";
@@ -216,4 +216,65 @@ export async function getPastQueries() {
       recommendations: true,
     },
   });
+}
+
+export async function getReplacementRecommendation(queryId: string, currentTitles: string[]) {
+  const user = await getOrCreateUser();
+  if (!user) {
+    throw new Error("Unauthorized");
+  }
+
+  // Basic rate limiting
+  const { success } = checkRateLimit(user.id, 10, 60000);
+  if (!success) {
+    throw new Error("Rate limit exceeded. Please wait a minute.");
+  }
+
+  const history = await db.watchHistory.findMany({
+    where: { userId: user.id },
+    select: { title: true, mediaType: true, rating: true },
+  });
+
+  const moodQuery = await db.moodQuery.findUnique({
+    where: { id: queryId },
+  });
+  if (!moodQuery) {
+    throw new Error("Query session not found.");
+  }
+
+  const conversation = moodQuery.conversation as unknown as ChatMessage[];
+  const tags = (moodQuery.interpretedTags || { genres: [], tone: [], pacing: "medium" }) as any;
+
+  // Generate 1 single suggestion
+  const aiRec = await generateSingleReplacement(
+    conversation,
+    tags,
+    history,
+    currentTitles
+  );
+
+  if (!aiRec) {
+    throw new Error("Failed to generate a new suggestion. Try again.");
+  }
+
+  // Cross reference TMDB
+  const tmdbMeta = await searchTitle(aiRec.title, aiRec.mediaType);
+  if (!tmdbMeta) {
+    throw new Error("Failed to verify suggestion on TMDB.");
+  }
+
+  // Save new recommendation in database linked to this query session
+  const savedRec = await db.recommendation.create({
+    data: {
+      moodQueryId: queryId,
+      tmdbId: tmdbMeta.id,
+      title: tmdbMeta.title,
+      mediaType: tmdbMeta.media_type,
+      posterPath: tmdbMeta.poster_path,
+      reason: aiRec.reason,
+    },
+  });
+
+  revalidatePath("/profile");
+  return savedRec;
 }

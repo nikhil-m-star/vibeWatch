@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { sendChatMessage } from "@/app/actions/chat";
+import { sendChatMessage, getReplacementRecommendation } from "@/app/actions/chat";
 import { toggleWatchlist, isTitleSaved } from "@/app/actions/watchlist";
+import { markAsWatched } from "@/app/actions/history";
 import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw
+  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw, Eye
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -23,6 +24,7 @@ export default function MoodChatPage() {
   const [recommendations, setRecommendations] = useState<any[]>([]);
   const [providers, setProviders] = useState<Record<number, WatchProvider[]>>({});
   const [savedIds, setSavedIds] = useState<Record<number, boolean>>({});
+  const [cardLoading, setCardLoading] = useState<Record<number, boolean>>({});
   
   // Error handling
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -119,6 +121,38 @@ export default function MoodChatPage() {
     } catch (err) {
       console.error(err);
       setSavedIds((prevMap) => ({ ...prevMap, [rec.tmdbId]: prev }));
+    }
+  };
+
+  const handleMarkAsWatched = async (rec: any) => {
+    if (!queryId) return;
+    setCardLoading((prev) => ({ ...prev, [rec.tmdbId]: true }));
+    setErrorMessage(null);
+
+    try {
+      // 1. Save to database watch history (null rating)
+      await markAsWatched(rec.tmdbId, rec.title, rec.mediaType, null);
+
+      // 2. Fetch replacement suggestion
+      const currentTitles = recommendations.map((r) => r.title);
+      const replacement = await getReplacementRecommendation(queryId, currentTitles);
+
+      // 3. Swap the card in recommendations list
+      setRecommendations((prev) => 
+        prev.map((r) => r.tmdbId === rec.tmdbId ? {
+          id: replacement.id,
+          tmdbId: replacement.tmdbId,
+          title: replacement.title,
+          mediaType: replacement.mediaType,
+          posterPath: replacement.posterPath,
+          reason: replacement.reason,
+        } : r)
+      );
+    } catch (err: any) {
+      console.error(err);
+      setErrorMessage(err.message || "Failed to replace card suggestion. Try again.");
+    } finally {
+      setCardLoading((prev) => ({ ...prev, [rec.tmdbId]: false }));
     }
   };
 
@@ -233,6 +267,27 @@ export default function MoodChatPage() {
               {recommendations.map((rec) => {
                 const isSaved = !!savedIds[rec.tmdbId];
                 const recProviders = providers[rec.tmdbId] || [];
+                const isLoadingCard = !!cardLoading[rec.tmdbId];
+
+                if (isLoadingCard) {
+                  return (
+                    <div
+                      key={rec.id || rec.tmdbId}
+                      className="flex flex-col gap-3 animate-pulse"
+                    >
+                      {/* Vertical Poster Skeleton */}
+                      <div className="aspect-[2/3] w-full rounded-[24px] bg-[#0d0d0d] flex items-center justify-center">
+                        <Loader2 className="animate-spin text-[#a855f7]/40" size={32} />
+                      </div>
+                      
+                      {/* Metadata Skeleton */}
+                      <div className="space-y-2 mt-1">
+                        <div className="h-4 bg-[#0d0d0d] rounded-md w-3/4" />
+                        <div className="h-10 bg-[#0d0d0d] rounded-xl w-full" />
+                      </div>
+                    </div>
+                  );
+                }
 
                 return (
                   <div
@@ -253,7 +308,7 @@ export default function MoodChatPage() {
                       />
 
                       {/* Bottom action drawer on hover, leaving the poster visible */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3 bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center gap-2 rounded-b-[24px]">
+                      <div className="absolute bottom-0 left-0 right-0 p-3 bg-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col gap-2 rounded-b-[24px]">
                         <div className="flex gap-2 w-full">
                           <button
                             onClick={() => handleToggleWatchlist(rec)}
@@ -266,17 +321,24 @@ export default function MoodChatPage() {
                             )}
                           </button>
 
-                          {rec.mediaType === "movie" && (
-                            <a
-                              href={`https://www.google.com/search?q=bookmyshow+${encodeURIComponent(rec.title)}+tickets`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center justify-center gap-1.5 py-2.5 px-3 text-[9px] district-btn-primary bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25"
-                            >
-                              Tickets <ExternalLink size={10} />
-                            </a>
-                          )}
+                          <button
+                            onClick={() => handleMarkAsWatched(rec)}
+                            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-secondary text-gray-300 hover:text-white"
+                          >
+                            Watched <Eye size={10} />
+                          </button>
                         </div>
+
+                        {rec.mediaType === "movie" && (
+                          <a
+                            href={`https://www.google.com/search?q=bookmyshow+${encodeURIComponent(rec.title)}+tickets`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full flex items-center justify-center gap-1.5 py-2.5 text-[9px] district-btn-primary bg-[#a855f7] hover:bg-[#b55fe6] text-white shadow-lg shadow-[#a855f7]/25"
+                          >
+                            Tickets <ExternalLink size={10} />
+                          </a>
+                        )}
                       </div>
                     </div>
 
