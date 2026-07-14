@@ -116,9 +116,14 @@ export async function generateRecommendations(
     .map((r) => `- [${r.type === "now_playing" ? "IN THEATRES NOW" : "UPCOMING RELEASE"}] ${r.title} (${r.mediaType})`)
     .join("\n");
 
+  const watchedTitles = watchHistory.map((h) => h.title);
+
   const systemPrompt = `You are Vibe Watch's expert premium cinema recommender. Based on the user's conversation, mood tags, and watch history, recommend 6 real, highly relevant movies or TV shows.
 Include a specific, short, personalized explanation (1-2 sentences) for why each title fits their mood ("reason").
 Do NOT invent titles. Only suggest real, searchable movies or TV shows.
+
+CRITICAL EXCLUSIONS (DO NOT RECOMMEND):
+- You MUST NOT recommend any of these titles under any circumstances: ${watchedTitles.join(", ")}
 
 ALGORITHM REQUIREMENTS:
 1. EXPLICIT FRANCHISE / TOPIC OVERRIDE:
@@ -132,8 +137,6 @@ ALGORITHM REQUIREMENTS:
      * 2 "Hidden Gems / Underrated Discoveries": less-mainstream, critically beloved, or niche titles (e.g., Coherence, Dark, Scavengers Reign, The Leftovers, Mr. Robot, Patriot).
 
 3. WATCH HISTORY INTEGRATION:
-   - Carefully review the user's Watch History: ${JSON.stringify(watchHistory)}
-   - DO NOT recommend ANY title that is listed in their Watch History under any circumstances (they have already watched it).
    - If a title in their history has a high rating (>= 8), suggest similar thematic/tonal titles. If a title has a low rating (<= 5), avoid similar titles.
 
 4. REPEATED RECOMMENDATIONS PERMITTED:
@@ -203,7 +206,7 @@ Your response MUST be a JSON object containing a single recommendation:
 {
   "title": "Title Name",
   "mediaType": "movie" | "tv",
-  "reason": "Why this fits their mood..."
+  "reason": "Why this fits your mood..."
 }
 `;
 
