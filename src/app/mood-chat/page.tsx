@@ -266,6 +266,17 @@ export default function MoodChatPage() {
                   <p className="text-xs text-red-400 font-semibold">{errorMessage}</p>
                 </div>
               )}
+
+              {/* Reset Chat button to return to empty presets state */}
+              <div className="flex justify-center pt-2">
+                <button
+                  onClick={startNewSession}
+                  className="cursor-pointer flex items-center justify-center gap-1.5 bg-white/5 hover:bg-white/10 text-white font-extrabold text-[9px] uppercase tracking-wider px-4 py-2.5 rounded-lg transition-all hover:scale-[1.02]"
+                >
+                  <RotateCcw size={10} />
+                  Reset Chat
+                </button>
+              </div>
             </div>
           </div>
         ) : (
