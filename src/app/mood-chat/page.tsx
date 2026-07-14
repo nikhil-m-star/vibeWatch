@@ -262,52 +262,60 @@ export default function MoodChatPage() {
               {isLoading ? (
                 <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center animate-in fade-in duration-500">
                   {/* Cinematic smooth ribbon stretching edge-to-edge across screen */}
-                  <div className="w-screen overflow-hidden py-6 flex items-center justify-center gap-4 md:gap-8">
-                    {(() => {
-                      const offsets = [-3, -2, -1, 0, 1, 2, 3];
-                      return offsets.map((offset) => {
-                        const idx = (loadingActiveIndex + offset + activePosters.length) % activePosters.length;
-                        const poster = activePosters[idx];
-                        
-                        // Dynamic scales and opacities on a fixed base dimension (GPU composite layer)
-                        let scaleStyle = "scale-100";
-                        let opacityStyle = "opacity-100";
-                        let zIndexStyle = "z-0";
-                        let shadowStyle = "";
-                        
-                        if (offset === 0) {
-                          scaleStyle = "scale-[1.18]";
-                          opacityStyle = "opacity-100";
-                          zIndexStyle = "z-20";
-                          shadowStyle = "shadow-[0_20px_50px_rgba(0,0,0,0.9)]";
-                        } else if (Math.abs(offset) === 1) {
-                          scaleStyle = "scale-[0.92]";
-                          opacityStyle = "opacity-45";
-                          zIndexStyle = "z-10";
-                        } else if (Math.abs(offset) === 2) {
-                          scaleStyle = "scale-[0.72]";
-                          opacityStyle = "opacity-15";
-                          zIndexStyle = "z-0";
+                  <div className="w-screen h-[240px] md:h-[350px] relative overflow-hidden flex items-center justify-center">
+                    {activePosters.map((poster, index) => {
+                      // Calculate circular loop distance relative to active index
+                      let diff = index - loadingActiveIndex;
+                      const len = activePosters.length;
+                      
+                      if (diff < -len / 2) diff += len;
+                      if (diff > len / 2) diff -= len;
+                      
+                      const isVisible = Math.abs(diff) <= 3;
+                      
+                      // Map diff to hardware-accelerated transform scale and opacity
+                      let scale = 0.52;
+                      let opacity = 0;
+                      let zIndex = 0;
+                      
+                      if (isVisible) {
+                        if (diff === 0) {
+                          scale = 1.18;
+                          opacity = 1;
+                          zIndex = 30;
+                        } else if (Math.abs(diff) === 1) {
+                          scale = 0.92;
+                          opacity = 0.45;
+                          zIndex = 20;
+                        } else if (Math.abs(diff) === 2) {
+                          scale = 0.72;
+                          opacity = 0.15;
+                          zIndex = 10;
                         } else {
-                          scaleStyle = "scale-[0.52]";
-                          opacityStyle = "opacity-5";
-                          zIndexStyle = "z-0";
+                          scale = 0.52;
+                          opacity = 0.05;
+                          zIndex = 0;
                         }
-                        
-                        return (
-                          <div
-                            key={`${idx}-${offset}`}
-                            className={`w-32 h-48 md:w-48 md:h-72 rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[850ms] ease-in-out transform flex-none ${scaleStyle} ${opacityStyle} ${zIndexStyle} ${shadowStyle}`}
-                          >
-                            <img
-                              src={poster}
-                              alt="Vibe match loading"
-                              className="w-full h-full object-cover pointer-events-none select-none"
-                            />
-                          </div>
-                        );
-                      });
-                    })()}
+                      }
+                      
+                      return (
+                        <div
+                          key={index}
+                          style={{
+                            transform: `translate3d(calc(-50% + ${diff * 22}vw), -50%, 0) scale(${scale})`,
+                            opacity: opacity,
+                            zIndex: zIndex,
+                          }}
+                          className="absolute left-1/2 top-1/2 w-28 h-42 md:w-44 md:h-66 rounded-2xl overflow-hidden bg-[#0d0d0d] shadow-[0_20px_50px_rgba(0,0,0,0.9)] transition-all duration-[850ms] ease-in-out transform-gpu flex-none"
+                        >
+                          <img
+                            src={poster}
+                            alt="Vibe match loading"
+                            className="w-full h-full object-cover pointer-events-none select-none"
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
 
                   {/* Clean small loading text at the bottom */}
