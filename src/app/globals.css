@@ -41,70 +41,31 @@ button, a, [role="button"], input[type="submit"] {
   scrollbar-width: none;
 }
 
-/* Playful popcorn pop animations for AI recommendation engine */
-@keyframes wiggleBucket {
-  0%, 100% { transform: scale(1) rotate(0deg); }
-  20% { transform: scale(1.15, 0.85) rotate(-3deg); }
-  40% { transform: scale(0.9, 1.1) rotate(3deg); }
-  60% { transform: scale(1.05, 0.95) rotate(-2deg); }
-  80% { transform: scale(0.98, 1.02) rotate(1deg); }
+/* Sleek, futuristic orbital AI loader animations */
+@keyframes orbit1 {
+  0% { transform: rotate(0deg) translateX(45px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(45px) rotate(-360deg); }
 }
 
-@keyframes popKernel1 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(-45px, -90px) scale(1.2) rotate(45deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(-70px, 60px) scale(0.6) rotate(180deg); opacity: 0; }
+@keyframes orbit2 {
+  0% { transform: rotate(180deg) translateX(65px) rotate(-180deg); }
+  100% { transform: rotate(540deg) translateX(65px) rotate(-540deg); }
 }
 
-@keyframes popKernel2 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(50px, -70px) scale(1.2) rotate(-45deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(80px, 80px) scale(0.6) rotate(-180deg); opacity: 0; }
+@keyframes orbit3 {
+  0% { transform: rotate(360deg) translateX(85px) rotate(-360deg); }
+  100% { transform: rotate(0deg) translateX(85px) rotate(0deg); }
 }
 
-@keyframes popKernel3 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(-20px, -110px) scale(1.2) rotate(90deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(-30px, 50px) scale(0.6) rotate(270deg); opacity: 0; }
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(168, 85, 247, 0.45)); opacity: 0.8; }
+  50% { transform: scale(1.12); filter: drop-shadow(0 0 28px rgba(168, 85, 247, 0.85)); opacity: 1; }
 }
 
-@keyframes popKernel4 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(30px, -100px) scale(1.2) rotate(-90deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(50px, 70px) scale(0.6) rotate(-270deg); opacity: 0; }
-}
-
-@keyframes popKernel5 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(-70px, -30px) scale(1.2) rotate(-30deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(-100px, 90px) scale(0.6) rotate(-90deg); opacity: 0; }
-}
-
-@keyframes popKernel6 {
-  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  30% { transform: translate(70px, -20px) scale(1.2) rotate(30deg); opacity: 1; }
-  90% { opacity: 1; }
-  100% { transform: translate(100px, 100px) scale(0.6) rotate(90deg); opacity: 0; }
-}
-
-.animate-wiggle-bucket { animation: wiggleBucket 1.4s infinite ease-in-out; }
-.animate-kernel-1 { animation: popKernel1 2.2s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-.animate-kernel-2 { animation: popKernel2 2.6s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.4s; }
-.animate-kernel-3 { animation: popKernel3 2.4s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.8s; }
-.animate-kernel-4 { animation: popKernel4 2.8s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.2s; }
-.animate-kernel-5 { animation: popKernel5 2.5s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 1.6s; }
-.animate-kernel-6 { animation: popKernel6 3s infinite cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s; }
+.animate-orbit-1 { animation: orbit1 3.2s infinite linear; }
+.animate-orbit-2 { animation: orbit2 4.5s infinite linear; }
+.animate-orbit-3 { animation: orbit3 5.8s infinite linear; }
+.animate-glow-core { animation: glowPulse 2s infinite ease-in-out; }
 
 /* Premium Visual Patterns */
 .premium-dots {
