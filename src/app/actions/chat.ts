@@ -81,23 +81,26 @@ export async function sendChatMessage(queryId: string | null, messageText: strin
     }
 
     // Cross-reference with TMDB to get actual metadata and filter invalid titles
-    const verifiedRecs: any[] = [];
-    for (const rec of aiRecs) {
-      try {
-        const tmdbMeta = await searchTitle(rec.title, rec.mediaType as "movie" | "tv");
-        if (tmdbMeta) {
-          verifiedRecs.push({
-            tmdbId: tmdbMeta.id,
-            title: tmdbMeta.title,
-            mediaType: rec.mediaType,
-            posterPath: tmdbMeta.poster_path,
-            reason: rec.reason,
-          });
+    const verifiedRecsResults = await Promise.all(
+      aiRecs.map(async (rec) => {
+        try {
+          const tmdbMeta = await searchTitle(rec.title, rec.mediaType as "movie" | "tv");
+          if (tmdbMeta) {
+            return {
+              tmdbId: tmdbMeta.id,
+              title: tmdbMeta.title,
+              mediaType: rec.mediaType,
+              posterPath: tmdbMeta.poster_path,
+              reason: rec.reason,
+            };
+          }
+        } catch (err) {
+          console.error(`TMDB search failed for ${rec.title}:`, err);
         }
-      } catch (err) {
-        console.error(`TMDB search failed for ${rec.title}:`, err);
-      }
-    }
+        return null;
+      })
+    );
+    const verifiedRecs = verifiedRecsResults.filter((r): r is NonNullable<typeof r> => r !== null);
 
     // Save final conversation completion message
     const tagsString = interpretedResult.interpretedTags?.tone?.join(", ") || "Chill";
@@ -125,20 +128,20 @@ export async function sendChatMessage(queryId: string | null, messageText: strin
     }
 
     // Save recommendations and link to moodQuery
-    const savedRecs = [];
-    for (const rec of verifiedRecs) {
-      const saved = await db.recommendation.create({
-        data: {
-          moodQueryId: moodQuery.id,
-          tmdbId: rec.tmdbId,
-          title: rec.title,
-          mediaType: rec.mediaType,
-          posterPath: rec.posterPath,
-          reason: rec.reason,
-        },
-      });
-      savedRecs.push(saved);
-    }
+    const savedRecs = await Promise.all(
+      verifiedRecs.map((rec) =>
+        db.recommendation.create({
+          data: {
+            moodQueryId: moodQuery.id,
+            tmdbId: rec.tmdbId,
+            title: rec.title,
+            mediaType: rec.mediaType,
+            posterPath: rec.posterPath,
+            reason: rec.reason,
+          },
+        })
+      )
+    );
 
     revalidatePath("/profile");
     return {

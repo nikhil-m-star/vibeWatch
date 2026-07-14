@@ -20,7 +20,7 @@ export interface AIRecommendation {
 }
 
 const NIM_BASE_URL = "https://integrate.api.nvidia.com/v1";
-const MODEL_NAME = "meta/llama-3.3-70b-instruct";
+const MODEL_NAME = "meta/llama-3.1-8b-instruct";
 
 async function callNIM(messages: { role: string; content: string }[], jsonMode = false) {
   const apiKey = process.env.NVIDIA_NIM_API_KEY;
