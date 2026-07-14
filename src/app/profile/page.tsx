@@ -1,0 +1,83 @@
+import { getOrCreateUser } from "@/lib/user";
+import { getPastQueries } from "@/app/actions/chat";
+import { getWatchHistory } from "@/app/actions/history";
+import { getWatchlist } from "@/app/actions/watchlist";
+import ProfileTabs from "./ProfileTabs";
+import { Sparkles, History, Bookmark } from "lucide-react";
+
+export const dynamic = "force-dynamic";
+
+export default async function ProfilePage() {
+  const user = await getOrCreateUser();
+  if (!user) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#08090c]">
+        <p className="text-gray-400 text-sm">Please sign in to view your profile.</p>
+      </div>
+    );
+  }
+
+  // Parallel fetch stats, past queries, and history
+  const [pastQueries, watchHistory, watchlist] = await Promise.all([
+    getPastQueries(),
+    getWatchHistory(),
+    getWatchlist(),
+  ]);
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-10 w-full flex-1 space-y-12">
+      {/* Profile Header Card */}
+      <div className="relative p-6 md:p-8 rounded-3xl bg-[#11131a] border border-white/5 overflow-hidden shadow-xl glow-card flex flex-col md:flex-row items-center justify-between gap-6">
+        
+        {/* Background glow decoration */}
+        <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-gradient-to-r from-red-500/10 to-orange-500/10 rounded-full blur-[60px] pointer-events-none" />
+
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="h-16 w-16 rounded-full bg-gradient-to-tr from-red-500 to-orange-500 flex items-center justify-center font-black text-2xl text-white tracking-tighter">
+            {user.name?.charAt(0) || "U"}
+          </div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-black tracking-tight text-white leading-tight">
+              {user.name || "User Profile"}
+            </h1>
+            <p className="text-xs text-gray-500 mt-1">{user.email}</p>
+          </div>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-3 gap-6 relative z-10 w-full md:w-auto border-t md:border-t-0 md:border-l border-white/5 pt-6 md:pt-0 md:pl-10">
+          <div className="text-center md:text-left">
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest block mb-0.5">
+              Sessions
+            </span>
+            <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
+              <Sparkles size={14} className="text-orange-400" /> {pastQueries.length}
+            </span>
+          </div>
+
+          <div className="text-center md:text-left">
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest block mb-0.5">
+              Watchlist
+            </span>
+            <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
+              <Bookmark size={14} className="text-red-500" /> {watchlist.length}
+            </span>
+          </div>
+
+          <div className="text-center md:text-left">
+            <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest block mb-0.5">
+              Watched
+            </span>
+            <span className="text-lg font-black text-white flex items-center justify-center md:justify-start gap-1">
+              <History size={14} className="text-green-500" /> {watchHistory.length}
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Tabs navigation and lists */}
+      <ProfileTabs pastQueries={pastQueries} watchHistory={watchHistory} />
+    </div>
+  );
+}

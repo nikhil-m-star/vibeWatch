@@ -1,0 +1,64 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id             String         @id @default(uuid())
+  clerkId        String         @unique
+  name           String?
+  email          String         @unique
+  createdAt      DateTime       @default(now())
+  moodQueries    MoodQuery[]
+  savedTitles    SavedTitle[]
+  watchHistories WatchHistory[]
+}
+
+model MoodQuery {
+  id              String           @id @default(uuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  conversation    Json             // Array of {role: "user" | "assistant", content: string}
+  interpretedTags Json             // {genres: string[], tone: string[], pacing: string}
+  createdAt       DateTime         @default(now())
+  recommendations Recommendation[]
+}
+
+model Recommendation {
+  id          String    @id @default(uuid())
+  moodQueryId String
+  moodQuery   MoodQuery @relation(fields: [moodQueryId], references: [id], onDelete: Cascade)
+  tmdbId      Int
+  title       String
+  mediaType   String    // "movie" | "tv"
+  posterPath  String?
+  reason      String    // Short AI-generated why-this-fits-your-mood text
+}
+
+model SavedTitle {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tmdbId    Int
+  title     String
+  mediaType String   // "movie" | "tv"
+  savedAt   DateTime @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+}
+
+model WatchHistory {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tmdbId    Int
+  title     String
+  mediaType String   // "movie" | "tv"
+  rating    Int?     // 1-5
+  watchedAt DateTime @default(now())
+
+  @@unique([userId, tmdbId, mediaType])
+}
