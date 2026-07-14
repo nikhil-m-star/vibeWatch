@@ -8,7 +8,7 @@ import { getProvidersAction } from "@/app/actions/tmdb";
 import { ChatMessage } from "@/lib/nim";
 import { WatchProvider } from "@/lib/tmdb";
 import { 
-  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw, Eye, Laugh, BookOpen, Shield, Film
+  Compass, Check, Loader2, ArrowUp, ExternalLink, RotateCcw, Eye, Laugh, BookOpen, Shield, Film, Flame, Tv, Clapperboard, Ticket
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -222,24 +222,34 @@ export default function MoodChatPage() {
               )}
 
               {isLoading ? (
-                <div className="flex flex-col items-center py-6">
-                  {/* Playful central radar sonar animation */}
-                  <div className="relative h-40 w-40 flex items-center justify-center mx-auto mb-8">
-                    {/* Sonar waves */}
-                    <div className="absolute inset-0 bg-[#a855f7]/10 rounded-full animate-ping duration-[1800ms]" />
-                    <div className="absolute inset-3 bg-[#a855f7]/15 rounded-full animate-pulse" />
-                    <div className="absolute inset-10 bg-black rounded-full flex items-center justify-center shadow-2xl shadow-[#a855f7]/30">
-                      <Loader2 size={36} className="animate-spin text-[#a855f7]" />
+                <div className="flex flex-col items-center py-8">
+                  {/* Playful Cinema Vibe Mixer Sonar core */}
+                  <div className="relative h-44 w-44 flex items-center justify-center mx-auto mb-10">
+                    {/* Pulsing colored glow rings */}
+                    <div className="absolute inset-0 bg-[#a855f7]/10 rounded-full animate-ping duration-[2000ms]" />
+                    <div className="absolute inset-4 bg-indigo-500/5 rounded-full animate-pulse" />
+                    <div className="absolute inset-10 bg-black rounded-full flex items-center justify-center shadow-xl shadow-[#a855f7]/25 relative z-20">
+                      <Loader2 size={32} className="animate-spin text-[#a855f7]" />
                     </div>
                     
-                    {/* Playful Floating Genre Tags rising up */}
-                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-[#a855f7]/10 text-[#c084fc] px-3 py-1 rounded-full animate-float-1 top-2 left-[-15px] shadow-lg shadow-[#a855f7]/5">Sci-Fi</span>
-                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full animate-float-2 top-16 right-[-25px] shadow-lg shadow-amber-500/5">Action</span>
-                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full animate-float-3 top-[-15px] right-4 shadow-lg shadow-rose-500/5">Drama</span>
-                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-teal-500/10 text-teal-400 px-3 py-1 rounded-full animate-float-4 bottom-8 left-[-35px] shadow-lg shadow-teal-500/5">Comedy</span>
-                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full animate-float-5 bottom-0 right-[-10px] shadow-lg shadow-indigo-500/5">Thriller</span>
+                    {/* Playful Elastic Pop-out Cinema Icons */}
+                    <div className="absolute animate-pop-1 z-10 bg-amber-500/10 p-2.5 rounded-full text-amber-400 shadow-md shadow-amber-500/5">
+                      <Clapperboard size={18} />
+                    </div>
+                    <div className="absolute animate-pop-2 z-10 bg-rose-500/10 p-2.5 rounded-full text-rose-400 shadow-md shadow-rose-500/5">
+                      <Ticket size={18} />
+                    </div>
+                    <div className="absolute animate-pop-3 z-10 bg-[#a855f7]/10 p-2.5 rounded-full text-[#c084fc] shadow-md shadow-[#a855f7]/5">
+                      <Film size={18} />
+                    </div>
+                    <div className="absolute animate-pop-4 z-10 bg-teal-500/10 p-2.5 rounded-full text-teal-400 shadow-md shadow-teal-500/5">
+                      <Tv size={18} />
+                    </div>
+                    <div className="absolute animate-pop-5 z-10 bg-orange-500/10 p-2.5 rounded-full text-orange-400 shadow-md shadow-orange-500/5">
+                      <Flame size={18} />
+                    </div>
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Scanning vibes...</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Blending your cinema vibe...</span>
                 </div>
               ) : lastAiMsg ? (
                 <div className="bg-white/[0.03] rounded-2xl p-5 text-left">

@@ -41,29 +41,52 @@ button, a, [role="button"], input[type="submit"] {
   scrollbar-width: none;
 }
 
-/* Floating tag keyframe animations for AI processing loading state */
-@keyframes floatUp {
-  0% {
-    transform: translateY(30px) scale(0.85);
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.85;
-  }
-  70% {
-    opacity: 0.85;
-  }
-  100% {
-    transform: translateY(-50px) scale(1.1);
-    opacity: 0;
-  }
+/* Playful pop and float animations for AI movie matching */
+@keyframes popFloat1 {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  15% { transform: translate(-70px, -50px) scale(1.2) rotate(-15deg); opacity: 1; }
+  35% { transform: translate(-65px, -55px) scale(1) rotate(-10deg); opacity: 1; }
+  80% { opacity: 0.9; }
+  100% { transform: translate(-80px, -90px) scale(0.7) rotate(-25deg); opacity: 0; }
 }
 
-.animate-float-1 { animation: floatUp 3.2s infinite ease-in-out; }
-.animate-float-2 { animation: floatUp 4.2s infinite ease-in-out 0.8s; }
-.animate-float-3 { animation: floatUp 3.6s infinite ease-in-out 0.4s; }
-.animate-float-4 { animation: floatUp 4.8s infinite ease-in-out 1.2s; }
-.animate-float-5 { animation: floatUp 5.4s infinite ease-in-out 1.8s; }
+@keyframes popFloat2 {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  15% { transform: translate(80px, -40px) scale(1.2) rotate(15deg); opacity: 1; }
+  35% { transform: translate(75px, -45px) scale(1) rotate(10deg); opacity: 1; }
+  80% { opacity: 0.9; }
+  100% { transform: translate(90px, -80px) scale(0.7) rotate(25deg); opacity: 0; }
+}
+
+@keyframes popFloat3 {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  15% { transform: translate(-60px, 60px) scale(1.2) rotate(-20deg); opacity: 1; }
+  35% { transform: translate(-55px, 55px) scale(1) rotate(-15deg); opacity: 1; }
+  80% { opacity: 0.9; }
+  100% { transform: translate(-70px, 90px) scale(0.7) rotate(-30deg); opacity: 0; }
+}
+
+@keyframes popFloat4 {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  15% { transform: translate(70px, 50px) scale(1.2) rotate(20deg); opacity: 1; }
+  35% { transform: translate(65px, 45px) scale(1) rotate(15deg); opacity: 1; }
+  80% { opacity: 0.9; }
+  100% { transform: translate(80px, 80px) scale(0.7) rotate(30deg); opacity: 0; }
+}
+
+@keyframes popFloat5 {
+  0% { transform: translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
+  15% { transform: translate(0px, -90px) scale(1.25) rotate(5deg); opacity: 1; }
+  35% { transform: translate(0px, -85px) scale(1) rotate(0deg); opacity: 1; }
+  80% { opacity: 0.9; }
+  100% { transform: translate(0px, -130px) scale(0.6) rotate(10deg); opacity: 0; }
+}
+
+.animate-pop-1 { animation: popFloat1 3.5s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.animate-pop-2 { animation: popFloat2 4s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.8s; }
+.animate-pop-3 { animation: popFloat3 3.8s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.4s; }
+.animate-pop-4 { animation: popFloat4 4.5s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.2s; }
+.animate-pop-5 { animation: popFloat5 5s infinite cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.6s; }
 
 /* Premium Visual Patterns */
 .premium-dots {
