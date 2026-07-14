@@ -167,14 +167,14 @@ export default function MoodChatPage() {
     localStorage.removeItem("vibe_watch_chat_session");
   };
 
-  // Preset chips for the empty state with icons
+  // Preset chips for the empty state with unique playful styles
   const presets = [
-    { text: "Something light and fun", icon: Laugh },
-    { text: "Emotional drama to watch", icon: Film },
-    { text: "Fast-paced thriller", icon: Compass }, // Using Compass representing direction/thrills
-    { text: "Background noise for studying", icon: BookOpen },
-    { text: "Dark superhero series", icon: Shield },
-    { text: "Mind-bending sci-fi", icon: Compass }
+    { text: "Something light and fun", icon: Laugh, hoverBg: "hover:bg-amber-400 hover:text-black", rotateClass: "hover:rotate-1" },
+    { text: "Emotional drama to watch", icon: Film, hoverBg: "hover:bg-rose-500 hover:text-white", rotateClass: "hover:-rotate-2" },
+    { text: "Fast-paced thriller", icon: Compass, hoverBg: "hover:bg-orange-500 hover:text-white", rotateClass: "hover:rotate-2" },
+    { text: "Background noise for studying", icon: BookOpen, hoverBg: "hover:bg-teal-400 hover:text-black", rotateClass: "hover:-rotate-1" },
+    { text: "Dark superhero series", icon: Shield, hoverBg: "hover:bg-indigo-500 hover:text-white", rotateClass: "hover:rotate-1" },
+    { text: "Mind-bending sci-fi", icon: Compass, hoverBg: "hover:bg-lime-400 hover:text-black", rotateClass: "hover:-rotate-2" }
   ];
 
   return (
@@ -199,9 +199,9 @@ export default function MoodChatPage() {
                       setInputText(preset.text);
                       handleSendMessage(preset.text);
                     }}
-                    className="cursor-pointer flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0d0d0d] hover:bg-[#a855f7] hover:text-white text-gray-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.05] shadow-lg shadow-black/40"
+                    className={`cursor-pointer flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-[#0d0d0d] text-gray-300 font-bold text-xs uppercase tracking-wider transition-all duration-300 hover:scale-[1.05] shadow-lg shadow-black/40 ${preset.hoverBg} ${preset.rotateClass}`}
                   >
-                    <preset.icon size={14} className="text-[#a855f7] group-hover:text-white flex-shrink-0" />
+                    <preset.icon size={14} className="text-[#a855f7] group-hover:text-inherit flex-shrink-0" />
                     <span>{preset.text}</span>
                   </button>
                 ))}
@@ -222,9 +222,24 @@ export default function MoodChatPage() {
               )}
 
               {isLoading ? (
-                <div className="flex items-center justify-center gap-2.5 py-4">
-                  <Loader2 size={16} className="animate-spin text-[#a855f7]" />
-                  <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Finding your matches...</span>
+                <div className="flex flex-col items-center py-6">
+                  {/* Playful central radar sonar animation */}
+                  <div className="relative h-40 w-40 flex items-center justify-center mx-auto mb-8">
+                    {/* Sonar waves */}
+                    <div className="absolute inset-0 bg-[#a855f7]/10 rounded-full animate-ping duration-[1800ms]" />
+                    <div className="absolute inset-3 bg-[#a855f7]/15 rounded-full animate-pulse" />
+                    <div className="absolute inset-10 bg-black rounded-full flex items-center justify-center shadow-2xl shadow-[#a855f7]/30">
+                      <Loader2 size={36} className="animate-spin text-[#a855f7]" />
+                    </div>
+                    
+                    {/* Playful Floating Genre Tags rising up */}
+                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-[#a855f7]/10 text-[#c084fc] px-3 py-1 rounded-full animate-float-1 top-2 left-[-15px] shadow-lg shadow-[#a855f7]/5">Sci-Fi</span>
+                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-amber-500/10 text-amber-400 px-3 py-1 rounded-full animate-float-2 top-16 right-[-25px] shadow-lg shadow-amber-500/5">Action</span>
+                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-rose-500/10 text-rose-400 px-3 py-1 rounded-full animate-float-3 top-[-15px] right-4 shadow-lg shadow-rose-500/5">Drama</span>
+                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-teal-500/10 text-teal-400 px-3 py-1 rounded-full animate-float-4 bottom-8 left-[-35px] shadow-lg shadow-teal-500/5">Comedy</span>
+                    <span className="absolute text-[8px] font-black uppercase tracking-wider bg-indigo-500/10 text-indigo-400 px-3 py-1 rounded-full animate-float-5 bottom-0 right-[-10px] shadow-lg shadow-indigo-500/5">Thriller</span>
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Scanning vibes...</span>
                 </div>
               ) : lastAiMsg ? (
                 <div className="bg-white/[0.03] rounded-2xl p-5 text-left">

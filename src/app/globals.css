@@ -41,6 +41,30 @@ button, a, [role="button"], input[type="submit"] {
   scrollbar-width: none;
 }
 
+/* Floating tag keyframe animations for AI processing loading state */
+@keyframes floatUp {
+  0% {
+    transform: translateY(30px) scale(0.85);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-50px) scale(1.1);
+    opacity: 0;
+  }
+}
+
+.animate-float-1 { animation: floatUp 3.2s infinite ease-in-out; }
+.animate-float-2 { animation: floatUp 4.2s infinite ease-in-out 0.8s; }
+.animate-float-3 { animation: floatUp 3.6s infinite ease-in-out 0.4s; }
+.animate-float-4 { animation: floatUp 4.8s infinite ease-in-out 1.2s; }
+.animate-float-5 { animation: floatUp 5.4s infinite ease-in-out 1.8s; }
+
 /* Premium Visual Patterns */
 .premium-dots {
   background-image: radial-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px);
