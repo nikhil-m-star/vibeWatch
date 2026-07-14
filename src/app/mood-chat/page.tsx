@@ -248,9 +248,9 @@ export default function MoodChatPage() {
               )}
 
               {isLoading ? (
-                <div className="flex flex-col items-center py-6 w-full">
-                  {/* Cinematic Bouncy Carousel ribbon */}
-                  <div className="w-full overflow-hidden py-6 flex items-center justify-center gap-3 md:gap-4 mx-auto mb-6">
+                <div className="w-screen relative left-1/2 -translate-x-1/2 overflow-hidden py-10 flex items-center justify-center">
+                  {/* Cinematic smooth ribbon stretching edge-to-edge */}
+                  <div className="w-full py-4 flex items-center justify-center gap-4 md:gap-6 mx-auto">
                     {(() => {
                       const offsets = [-2, -1, 0, 1, 2];
                       return offsets.map((offset) => {
@@ -259,33 +259,27 @@ export default function MoodChatPage() {
                         
                         // Dynamic properties based on center distance
                         let scaleClass = "";
-                        let rotateClass = "";
                         let opacityClass = "";
                         let sizeClass = "";
-                        let borderClass = "";
                         
                         if (offset === 0) {
-                          scaleClass = "scale-110 z-10 shadow-2xl shadow-[#a855f7]/30";
-                          rotateClass = "rotate-0";
+                          scaleClass = "scale-110 z-10 shadow-2xl shadow-black/90";
                           opacityClass = "opacity-100";
-                          sizeClass = "w-24 h-36 md:w-28 md:h-40";
-                          borderClass = "border-2 border-[#a855f7]/30";
+                          sizeClass = "w-36 h-54 md:w-52 md:h-78";
                         } else if (Math.abs(offset) === 1) {
                           scaleClass = "scale-95";
-                          rotateClass = offset === -1 ? "-rotate-6" : "rotate-6";
-                          opacityClass = "opacity-60";
-                          sizeClass = "w-20 h-30 md:w-24 md:h-34";
+                          opacityClass = "opacity-45";
+                          sizeClass = "w-30 h-45 md:w-40 md:h-60";
                         } else {
                           scaleClass = "scale-80";
-                          rotateClass = offset === -2 ? "-rotate-12" : "rotate-12";
-                          opacityClass = "opacity-20";
-                          sizeClass = "w-16 h-24 md:w-20 md:h-28";
+                          opacityClass = "opacity-10";
+                          sizeClass = "w-24 h-36 md:w-30 md:h-45";
                         }
                         
                         return (
                           <div
                             key={`${idx}-${offset}`}
-                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-700 ease-in-out transform flex-none ${scaleClass} ${rotateClass} ${opacityClass} ${sizeClass} ${borderClass}`}
+                            className={`rounded-2xl overflow-hidden bg-[#0d0d0d] transition-all duration-[1000ms] ease-in-out transform flex-none ${scaleClass} ${opacityClass} ${sizeClass}`}
                           >
                             <img
                               src={poster}
@@ -296,11 +290,6 @@ export default function MoodChatPage() {
                         );
                       });
                     })()}
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Loader2 size={12} className="animate-spin text-[#a855f7]" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#a855f7] animate-pulse">Calculating your cinema vibe...</span>
                   </div>
                 </div>
               ) : lastAiMsg ? (
