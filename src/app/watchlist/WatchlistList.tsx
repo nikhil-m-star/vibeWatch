@@ -101,7 +101,7 @@ export default function WatchlistList({ items }: WatchlistListProps) {
                       <div
                         key={prov.provider_id}
                         title={prov.provider_name}
-                        className="h-6 w-6 rounded-lg overflow-hidden border border-white/10"
+                        className="h-6 w-6 rounded-lg overflow-hidden bg-white p-[2px]"
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
