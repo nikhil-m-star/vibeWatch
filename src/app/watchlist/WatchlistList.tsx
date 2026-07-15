@@ -107,7 +107,7 @@ export default function WatchlistList({ items }: WatchlistListProps) {
                         <img
                           src={`https://image.tmdb.org/t/p/original${prov.logo_path}`}
                           alt={prov.provider_name}
-                          className="h-full w-full object-cover"
+                          className="h-full w-full object-contain"
                         />
                       </div>
                     ))}

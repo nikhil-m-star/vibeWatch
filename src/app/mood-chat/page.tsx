@@ -466,7 +466,7 @@ export default function MoodChatPage() {
                               src={`https://image.tmdb.org/t/p/original${provider.logo_path}`}
                               alt={provider.provider_name}
                               title={provider.provider_name}
-                              className="h-5 w-5 rounded object-cover bg-black/30 transition-transform hover:scale-110"
+                              className="h-5 w-5 rounded object-contain bg-black/30 transition-transform hover:scale-110"
                             />
                           ))}
                         </div>
